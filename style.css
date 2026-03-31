@@ -171,6 +171,19 @@ img {
 .home-title { font-size: var(--big-font-size); margin-bottom: var(--mb5); }
 .home-title-color { color: var(--first-color); }
 .home-social { display: flex; flex-direction: column; }
+
+/* Mobile version - social icons in a row */
+@media screen and (max-width: 768px) {
+    .home-social {
+        flex-direction: row;
+        justify-content: space-evenly;
+        width: 100%;
+    }
+    
+    .home-social-icon {
+        margin-bottom: 0;
+    }
+}
 .home-social-icon {
     width: max-content;
     margin-bottom: var(--mb2);
