@@ -255,9 +255,11 @@ img {
 }
 
 .skills-html { width: 95%; }
-.skills-css { width: 85%; }
-.skills-js { width: 65%; }
+.skills-css { width: 92%; }
+.skills-js { width: 95%; }
 .skills-ux { width: 85%; }
+.skills-tools { width: 90%; }
+.skills-ai { width: 80%; }
 .skills-img { border-radius: .5rem; }
 
 /*WORK*/
