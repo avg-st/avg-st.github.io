@@ -5,9 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Personal Portfolio Website</title>
         <link rel="icon" href="favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="elements/showcase.css">
-        <script src="elements/showcase.js" defer></script>
+        <link rel="stylesheet" href="style.css?v=project-edges-1">
+        <link rel="stylesheet" href="elements/showcase.css?v=ribbon-fade-1">
+        <script src="elements/showcase.js?v=project-edges-1" defer></script>
         <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700|Raleway:500.700' rel='stylesheet'>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
       
@@ -96,13 +96,10 @@
         </section>
 
         <!-- Original gallery by Shakuro; isolated to protect the portfolio styles. -->
-        <section class="ribbon-showcase" id="ribbon-gallery" aria-label="Endless Ribbon Gallery">
+        <section class="ribbon-showcase" id="ribbon-gallery" aria-label="3D project gallery. Use left and right arrow keys to explore." tabindex="0">
             <iframe class="ribbon-showcase-frame" src="elements/ribbon/index.html"
-                title="Shakuro — Endless Ribbon Gallery" loading="lazy" height="680"
+                title="Portfolio — 3D Project Gallery" loading="lazy" height="680" tabindex="-1"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
-            <p class="showcase-credit">Endless Ribbon Gallery by
-                <a href="https://codepen.io/editor/shakuro/pen/01a1c0a6-6d89-7ad0-9125-4878e8d34ac7" target="_blank" rel="noopener noreferrer">Shakuro</a>
-            </p>
         </section>
 
         <section class="skills section" id="skills">
@@ -200,6 +197,47 @@
 
         <section class="work section" id="work">
             <h2 class="section-title">Projects & Solutions</h2>
+
+        <!-- Animated image slider adapted from MDJAmin's CodePen. -->
+        <section class="landscape-showcase" aria-label="Landscape image slider">
+            <div class="landscape-slider" role="region" aria-roledescription="carousel" aria-label="Explore landscapes" tabindex="0">
+                <div class="landscape-slides">
+                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="Scotland">
+                        <div class="landscape-content">
+                            <h2>Scotland</h2>
+                            <p>Experience the mystical Highlands under twilight skies and misty lochs.</p>
+                            <a href="https://unsplash.com/s/photos/scotland-highlands" target="_blank" rel="noopener noreferrer">See More</a>
+                        </div>
+                    </article>
+                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1439792675105-701e6a4ab6f0?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="Norway">
+                        <div class="landscape-content">
+                            <h2>Norway</h2>
+                            <p>Chase the Northern Lights under star-lit skies along scenic fjord roads.</p>
+                            <a href="https://unsplash.com/s/photos/norway-northern-lights" target="_blank" rel="noopener noreferrer">See More</a>
+                        </div>
+                    </article>
+                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1483982258113-b72862e6cff6?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="New Zealand">
+                        <div class="landscape-content">
+                            <h2>New Zealand</h2>
+                            <p>Wander dramatic, mist-laden mountain paths that feel straight out of a dream.</p>
+                            <a href="https://unsplash.com/s/photos/new-zealand-mountains" target="_blank" rel="noopener noreferrer">See More</a>
+                        </div>
+                    </article>
+                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="Japan">
+                        <div class="landscape-content">
+                            <h2>Japan</h2>
+                            <p>Discover serene mountain temples shrouded in dusk and ancient forest trails.</p>
+                            <a href="https://unsplash.com/s/photos/japan-mountains" target="_blank" rel="noopener noreferrer">See More</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="landscape-controls" aria-label="Slider controls">
+                    <button type="button" class="landscape-prev" aria-label="Previous landscape"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+                    <span class="landscape-counter" aria-live="polite" aria-atomic="true">Norway · 2 / 4</span>
+                    <button type="button" class="landscape-next" aria-label="Next landscape"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+                </div>
+            </div>
+        </section>
 
             
 
@@ -300,50 +338,7 @@
                         <i class='bx bxs-chevron-right' ></i>
                     </button>
                 </div>
-        </section>
-
-        <!-- Animated image slider adapted from MDJAmin's CodePen. -->
-        <section class="landscape-showcase" aria-label="Landscape image slider">
-            <div class="landscape-slider" role="region" aria-roledescription="carousel" aria-label="Explore landscapes" tabindex="0">
-                <div class="landscape-slides">
-                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="Scotland">
-                        <div class="landscape-content">
-                            <h2>Scotland</h2>
-                            <p>Experience the mystical Highlands under twilight skies and misty lochs.</p>
-                            <a href="https://unsplash.com/s/photos/scotland-highlands" target="_blank" rel="noopener noreferrer">See More</a>
-                        </div>
-                    </article>
-                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1439792675105-701e6a4ab6f0?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="Norway">
-                        <div class="landscape-content">
-                            <h2>Norway</h2>
-                            <p>Chase the Northern Lights under star-lit skies along scenic fjord roads.</p>
-                            <a href="https://unsplash.com/s/photos/norway-northern-lights" target="_blank" rel="noopener noreferrer">See More</a>
-                        </div>
-                    </article>
-                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1483982258113-b72862e6cff6?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="New Zealand">
-                        <div class="landscape-content">
-                            <h2>New Zealand</h2>
-                            <p>Wander dramatic, mist-laden mountain paths that feel straight out of a dream.</p>
-                            <a href="https://unsplash.com/s/photos/new-zealand-mountains" target="_blank" rel="noopener noreferrer">See More</a>
-                        </div>
-                    </article>
-                    <article class="landscape-item" style="--landscape-image: url('https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&amp;fit=crop&amp;w=1600&amp;q=85')" data-name="Japan">
-                        <div class="landscape-content">
-                            <h2>Japan</h2>
-                            <p>Discover serene mountain temples shrouded in dusk and ancient forest trails.</p>
-                            <a href="https://unsplash.com/s/photos/japan-mountains" target="_blank" rel="noopener noreferrer">See More</a>
-                        </div>
-                    </article>
-                </div>
-                <div class="landscape-controls" aria-label="Slider controls">
-                    <button type="button" class="landscape-prev" aria-label="Previous landscape"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
-                    <span class="landscape-counter" aria-live="polite" aria-atomic="true">Norway · 2 / 4</span>
-                    <button type="button" class="landscape-next" aria-label="Next landscape"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
-                </div>
             </div>
-            <p class="showcase-credit">Image slider by
-                <a href="https://codepen.io/MDJAmin/pen/GgpdKPy" target="_blank" rel="noopener noreferrer">MDJAmin</a>
-            </p>
         </section>
 
         <section class="contact section" id="contact">

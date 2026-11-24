@@ -13,7 +13,6 @@
     { title: "Admin Panel & Monitoring Dashboard", image: projectImages["6.webp"], url: "../../index.html#work" }
   ];
   const app = document.getElementById("app");
-  const stage = document.querySelector(".stage");
   const status = document.querySelector(".status");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const canvas = document.createElement("canvas");
@@ -45,6 +44,7 @@
 
   const motion = {
     offset: 0, velocity: 0,
+    scrollOffset: 0, targetScrollOffset: 0,
     pointerX: 0, pointerY: 0, parallaxX: 0, parallaxY: 0,
   };
   let conveyor = null;
@@ -53,16 +53,6 @@
   let sectionVisible = window.parent === window;
   let touch = null;
   let dragged = false;
-  let noise = createNoise(document.querySelector(".noise"));
-  const noiseCanvas = document.querySelector(".noise");
-  noiseCanvas.addEventListener("webglcontextlost", event => {
-    event.preventDefault();
-    noiseCanvas.style.backgroundImage = 'url("assets/noise.png")';
-  });
-  noiseCanvas.addEventListener("webglcontextrestored", () => {
-    noise = createNoise(noiseCanvas);
-    resize();
-  });
 
   function message(text) {
     status.textContent = text;
@@ -77,10 +67,6 @@
   }
 
   function resize() {
-    noise.resize();
-    const { scale, width } = layoutViewport(innerWidth, innerHeight);
-    stage.style.setProperty("--stage-scale", scale);
-    stage.style.setProperty("--stage-width", `${width}px`);
     conveyor?.resize(innerWidth, innerHeight);
   }
 
@@ -98,19 +84,14 @@
     const frames = previousTime ? Math.min((time - previousTime) / (1000 / 60), 3) : 1;
     previousTime = time;
     advanceMotion(motion, frames, projects.length, reducedMotion.matches);
-    noise.draw(reducedMotion.matches ? 0 : time);
     conveyor?.draw(motion);
     animationFrame = requestAnimationFrame(render);
   }
 
-  window.addEventListener("wheel", event => {
+  if (window.parent === window) window.addEventListener("wheel", event => {
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1;
     input((Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX) * unit);
-    if (window.parent !== window && !app.classList.contains("is-fallback") && !event.ctrlKey) {
-      event.preventDefault();
-      window.parent.postMessage({ type: "ribbon-scroll", delta: event.deltaY * unit }, location.protocol === "file:" ? "*" : location.origin);
-    }
-  }, { passive: false });
+  }, { passive: true });
   app.addEventListener("pointerdown", event => {
     dragged = false;
     if (!conveyor || event.pointerType === "mouse" || event.target.closest("a")) return;
@@ -144,9 +125,9 @@
     canvas.style.cursor = "";
   });
   window.addEventListener("keydown", event => {
-    if (!conveyor || !["ArrowDown", "ArrowUp"].includes(event.key)) return;
+    if (!conveyor || !["ArrowRight", "ArrowLeft"].includes(event.key)) return;
     event.preventDefault();
-    const direction = event.key === "ArrowDown" ? 1 : -1;
+    const direction = event.key === "ArrowRight" ? 1 : -1;
     if (reducedMotion.matches) motion.offset = wrap(motion.offset + direction, projects.length);
     else motion.velocity += direction * .06 / .94;
   });
@@ -156,7 +137,25 @@
     if (!document.hidden && sectionVisible) animationFrame = requestAnimationFrame(render);
   });
   window.addEventListener("message", event => {
-    if (event.origin !== location.origin || event.source !== window.parent || event.data?.type !== "ribbon-visibility") return;
+    if (event.origin !== location.origin || event.source !== window.parent) return;
+    const data = event.data;
+    if (data?.type === "ribbon-page-scroll" && Number.isFinite(data.offset)) {
+      motion.targetScrollOffset = data.offset;
+      return;
+    }
+    if (data?.type === "ribbon-step" && [1, -1].includes(data.direction)) {
+      motion.offset = wrap(motion.offset + data.direction, projects.length);
+      return;
+    }
+    if (["ribbon-pointer", "ribbon-pick"].includes(data?.type) && Number.isFinite(data.x) && Number.isFinite(data.y)) {
+      motion.pointerX = data.x * 2 - 1;
+      motion.pointerY = data.y * 2 - 1;
+      const canPick = data.type === "ribbon-pick" || Math.abs(motion.targetScrollOffset - motion.scrollOffset) < .01;
+      const slot = canPick ? conveyor?.pick(data.x * innerWidth, data.y * innerHeight, motion) ?? -1 : -1;
+      window.parent.postMessage({ type: data.type === "ribbon-pick" && slot >= 0 ? "ribbon-project" : "ribbon-hover", active: slot >= 0 }, location.protocol === "file:" ? "*" : location.origin);
+      return;
+    }
+    if (data?.type !== "ribbon-visibility") return;
     sectionVisible = event.data.visible === true;
     cancelAnimationFrame(animationFrame);
     previousTime = 0;
@@ -194,9 +193,12 @@ function wrap(value, period) {
 }
 
 function advanceMotion(state, frames, count, reduced) {
+  const previousScrollOffset = state.scrollOffset;
+  state.scrollOffset += (state.targetScrollOffset - state.scrollOffset) * (1 - Math.pow(.8, frames));
+  const scrollDelta = reduced ? 0 : state.scrollOffset - previousScrollOffset;
   const decay = Math.pow(.94, frames);
   // Integrate exponential damping so 60Hz and 120Hz travel the same distance.
-  state.offset = wrap(state.offset + (reduced ? 0 : state.velocity * .94 * (1 - decay) / .06), count);
+  state.offset = wrap(state.offset + scrollDelta + (reduced ? 0 : state.velocity * .94 * (1 - decay) / .06), count);
   state.velocity = reduced ? 0 : state.velocity * decay;
   const smoothing = 1 - Math.pow(.968, frames);
   state.parallaxX = reduced ? 0 : state.parallaxX + (state.pointerX - state.parallaxX) * smoothing;
@@ -405,14 +407,14 @@ function createConveyor(canvas, images, projects) {
       float visibility = 1.0 - smoothstep(26.0, 61.0, distanceToFloor);
       vec2 poolPosition = (vUv - vec2(-1.0, 8.0)) / vec2(13.0, 20.0);
       float pool = exp(-dot(poolPosition, poolPosition));
-      vec3 glass = mix(vec3(0.012, 0.017, 0.024), vec3(0.068, 0.080, 0.100), pool);
-      float floorAlpha = visibility * (0.12 + pool * 0.48);
+      vec3 glass = mix(vec3(0.98, 0.99, 1.0), vec3(0.91, 0.94, 0.98), pool);
+      float floorAlpha = visibility * (0.02 + pool * 0.08);
       vec2 screen = gl_FragCoord.xy / sceneSize;
       vec4 sharp = texture2D(reflection, screen);
       // Reflection alpha is strongest at the lower edge of the ribbon.
       float detail = 0.42 * smoothstep(0.52, 0.92, sharp.a);
       vec4 mirror = mix(texture2D(softReflection, screen), sharp, detail);
-      float amount = (0.32 + 0.29 * fresnel) * (1.0 - smoothstep(15.0, 45.0, distanceToFloor));
+      float amount = (0.14 + 0.17 * fresnel) * (1.0 - smoothstep(15.0, 45.0, distanceToFloor));
       float uncovered = 1.0 - mirror.a * amount;
       float alpha = mirror.a * amount + floorAlpha * uncovered;
       vec3 color = glass * floorAlpha * uncovered + mirror.rgb * vec3(0.76, 0.86, 0.96) * amount;
@@ -650,94 +652,4 @@ function createConveyor(canvas, images, projects) {
       return pixel[3] === 255 && pixel[0] > 0 && pixel[0] <= projects.length ? pixel[0] - 1 : -1;
     },
   };
-}
-
-function createNoise(canvas) {
-  const gl = canvas.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false });
-  const fallback = reason => {
-    console.warn("Shader grain is unavailable; using a static noise texture.", reason);
-    canvas.style.backgroundImage = 'url("assets/noise.png")';
-    canvas.style.backgroundSize = "128px 128px";
-    return { resize() {}, draw() {} };
-  };
-  if (!gl) return fallback("WebGL context was not available.");
-
-  function compile(type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      const message = gl.getShaderInfoLog(shader);
-      gl.deleteShader(shader);
-      throw new Error(message);
-    }
-    return shader;
-  }
-
-  let program, vertex, fragment;
-  try {
-    vertex = compile(gl.VERTEX_SHADER, `
-      attribute vec2 position;
-      void main() { gl_Position = vec4(position, 0.0, 1.0); }
-    `);
-    fragment = compile(gl.FRAGMENT_SHADER, `
-      precision highp float;
-      uniform float frame;
-      float random(vec2 p) {
-        return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
-      }
-      void main() {
-        // Refresh the whole grain field each frame, rather than a faint overlay.
-        vec2 pixel = gl_FragCoord.xy + vec2(mod(frame, 997.0) * 17.0, mod(frame, 991.0) * 31.0);
-        // Averaging samples softens harsh digital speckles into fine film grain.
-        float grain = (random(pixel) + random(pixel + 19.7)
-          + random(pixel + 43.1) + random(pixel + 71.9)) * 0.25;
-        gl_FragColor = vec4(vec3(grain), 1.0);
-      }
-    `);
-    program = gl.createProgram();
-    gl.attachShader(program, vertex);
-    gl.attachShader(program, fragment);
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
-  } catch (error) {
-    if (program) gl.deleteProgram(program);
-    return fallback(error);
-  } finally {
-    if (vertex) gl.deleteShader(vertex);
-    if (fragment) gl.deleteShader(fragment);
-  }
-  canvas.style.backgroundImage = "none";
-  gl.useProgram(program);
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const position = gl.getAttribLocation(program, "position");
-  gl.enableVertexAttribArray(position);
-  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-  const frame = gl.getUniformLocation(program, "frame");
-  let previousFrame = -1;
-
-  return {
-    resize() {
-      // Half-CSS-pixel grain stays fine on both standard and Retina displays.
-      const ratio = 2;
-      canvas.width = Math.round(document.documentElement.clientWidth * ratio);
-      canvas.height = Math.round(document.documentElement.clientHeight * ratio);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      previousFrame = -1;
-    },
-    draw(time) {
-      const currentFrame = Math.floor(time / 80);
-      if (gl.isContextLost() || currentFrame === previousFrame) return;
-      previousFrame = currentFrame;
-      gl.uniform1f(frame, currentFrame);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    },
-  };
-}
-
-function layoutViewport(width, height) {
-  const scale = height / 1080;
-  return { scale, width: width / scale };
 }
