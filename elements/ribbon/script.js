@@ -5,14 +5,19 @@
   // Embedded local textures also work when the portfolio is opened from disk.
   const projectImages = window.portfolioRibbonImages;
   const projects = [
+    { title: "Task Management & To-do App", image: projectImages["task-management"], url: "../../assets/projects/task-management.png" },
+    { title: "Weather App", image: projectImages["weather-app"], url: "https://www.figma.com/proto/z0x7tH5Ac9C6xRS9YNN6ob/Weather-App-UI-Design--Community-?node-id=2-2214" },
+    { title: "Planto", image: projectImages["planto"], url: "https://www.figma.com/proto/cGdZtnbHOCq5NXBA5ivVtJ/Interactive-Website--Figma-UI-Design-Tutorial-for-Beginners-%7C-Step-by-Step-Guide--Community-?node-id=0-1" },
+    { title: "Online Shopping App", image: projectImages["shopping-app"], url: "https://www.figma.com/design/F6DogmD7gBJZ7CglXbnBss/Online-Shopping-App--Community-?node-id=1-2" },
     { title: "Lead Management Dashboard", image: projectImages["1.webp"], url: "../../index.html#work" },
-    { title: "CRM Analytics Dashboard", image: projectImages["2.webp"], url: "../../index.html#work" },
+    { title: "Aspen Travel App", image: projectImages.aspen, url: "../../assets/projects/aspen-travel.png" },
     { title: "Content Management Platform", image: projectImages["3.webp"], url: "../../index.html#work" },
-    { title: "Support Ticket Management App", image: projectImages["4.webp"], url: "../../index.html#work" },
-    { title: "AI Chat Widget for Websites", image: projectImages["5.webp"], url: "../../index.html#work" },
+    { title: "Cinema Booking App", image: projectImages.cinema, url: "../../assets/projects/cinema-booking.png" },
+    { title: "Food Delivery App", image: projectImages.food, url: "../../assets/projects/food-delivery.png" },
     { title: "Admin Panel & Monitoring Dashboard", image: projectImages["6.webp"], url: "../../index.html#work" }
   ];
   const app = document.getElementById("app");
+  try { document.documentElement.dataset.theme = localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'; } catch {}
   const status = document.querySelector(".status");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   const canvas = document.createElement("canvas");
@@ -139,6 +144,11 @@
   window.addEventListener("message", event => {
     if (event.origin !== location.origin || event.source !== window.parent) return;
     const data = event.data;
+    if (data?.type === 'portfolio-theme' && ['light', 'dark'].includes(data.theme)) {
+      document.documentElement.dataset.theme = data.theme;
+      conveyor?.draw(motion);
+      return;
+    }
     if (data?.type === "ribbon-page-scroll" && Number.isFinite(data.offset)) {
       motion.targetScrollOffset = data.offset;
       return;
@@ -152,7 +162,7 @@
       motion.pointerY = data.y * 2 - 1;
       const canPick = data.type === "ribbon-pick" || Math.abs(motion.targetScrollOffset - motion.scrollOffset) < .01;
       const slot = canPick ? conveyor?.pick(data.x * innerWidth, data.y * innerHeight, motion) ?? -1 : -1;
-      window.parent.postMessage({ type: data.type === "ribbon-pick" && slot >= 0 ? "ribbon-project" : "ribbon-hover", active: slot >= 0 }, location.protocol === "file:" ? "*" : location.origin);
+      window.parent.postMessage({ type: data.type === "ribbon-pick" && slot >= 0 ? "ribbon-project" : "ribbon-hover", active: slot >= 0, url: slot >= 0 ? projects[slot].url : undefined }, location.protocol === "file:" ? "*" : location.origin);
       return;
     }
     if (data?.type !== "ribbon-visibility") return;
@@ -181,6 +191,7 @@
       const missing = textures.filter(image => !image).length;
       message(missing ? `${missing} project image(s) could not load. Their links remain available.` : "");
       resize();
+      window.parent.postMessage({ type: 'ribbon-ready' }, location.protocol === 'file:' ? '*' : location.origin);
     } catch (error) { fallback(error.message); }
   }
   resize();
@@ -379,7 +390,7 @@ function createConveyor(canvas, images, projects) {
   const fragmentSource = `
     precision highp float;
     uniform sampler2D atlas, reflection, softReflection;
-    uniform float offset, count, picking;
+    uniform float offset, count, picking, lightTheme;
     uniform lowp int surface;
     uniform vec2 grid, atlasSize, sceneSize;
     uniform vec2 reflectionSize, blurStep;
@@ -407,7 +418,7 @@ function createConveyor(canvas, images, projects) {
       float visibility = 1.0 - smoothstep(26.0, 61.0, distanceToFloor);
       vec2 poolPosition = (vUv - vec2(-1.0, 8.0)) / vec2(13.0, 20.0);
       float pool = exp(-dot(poolPosition, poolPosition));
-      vec3 glass = mix(vec3(0.98, 0.99, 1.0), vec3(0.91, 0.94, 0.98), pool);
+      vec3 glass = mix(mix(vec3(0.03, 0.04, 0.10), vec3(0.09, 0.08, 0.17), pool), mix(vec3(0.94, 0.93, 0.97), vec3(0.84, 0.85, 0.91), pool), lightTheme);
       float floorAlpha = visibility * (0.02 + pool * 0.08);
       vec2 screen = gl_FragCoord.xy / sceneSize;
       vec4 sharp = texture2D(reflection, screen);
@@ -447,7 +458,9 @@ function createConveyor(canvas, images, projects) {
       vec2 local = vec2(side > 0.0 ? fract(phase) : 1.0 - fract(phase), 1.0 - vUv.y);
       vec2 inset = 0.5 * grid / atlasSize;
       vec2 sampleUv = (cell + mix(inset, 1.0 - inset, local)) / grid;
-      vec3 color = texture2D(atlas, sampleUv).rgb;
+      vec4 artwork = texture2D(atlas, sampleUv);
+      vec3 backdrop = mix(vec3(0.03137, 0.04314, 0.12549), vec3(0.95686, 0.95294, 0.98039), lightTheme);
+      vec3 color = mix(backdrop, artwork.rgb, artwork.a);
       normal *= side;
       vec3 view = normalize(vView);
       float diffuse = max(0.0, dot(normal, light));
@@ -514,8 +527,7 @@ function createConveyor(canvas, images, projects) {
   atlas.width = columns * tileWidth;
   atlas.height = rows * tileHeight;
   const ctx = atlas.getContext("2d");
-  ctx.fillStyle = "#0f1316";
-  ctx.fillRect(0, 0, atlas.width, atlas.height);
+  ctx.clearRect(0, 0, atlas.width, atlas.height);
   images.forEach((image, index) => {
     const x = index % columns * tileWidth, y = Math.floor(index / columns) * tileHeight;
     if (image) {
@@ -561,7 +573,7 @@ function createConveyor(canvas, images, projects) {
   gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, softReflection, 0);
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   const uniformNames = ["rig", "camera", "target", "aspect", "offset", "count", "picking", "surface", "floorHeight",
-    "grid", "atlasSize", "reflection", "softReflection", "sceneSize", "reflectionSize", "blurStep"];
+    "grid", "atlasSize", "reflection", "softReflection", "sceneSize", "reflectionSize", "blurStep", "lightTheme"];
   const locations = Object.fromEntries(uniformNames.map(name => [name, gl.getUniformLocation(program, name)]));
   gl.uniform1i(locations.reflection, 1);
   gl.uniform1i(locations.softReflection, 2);
@@ -583,6 +595,7 @@ function createConveyor(canvas, images, projects) {
   }
 
   function draw(state, picking = false) {
+    gl.uniform1f(locations.lightTheme, document.documentElement.dataset.theme === 'light' ? 1 : 0);
     const view = ribbonView(state, viewportWidth, viewportHeight);
     gl.uniform3f(locations.camera, ...view.camera);
     gl.uniform3f(locations.target, ...view.target);

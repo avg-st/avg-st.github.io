@@ -30,10 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
   navLink.forEach((n) => n.addEventListener('click', linkAction));
 
   // === ScrollReveal анимации (из script.js) ===
+  const reduceRevealMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sr = ScrollReveal({
     origin: 'top',
-    distance: '80px',
-    duration: 2000,
+    distance: reduceRevealMotion ? '0px' : '80px',
+    duration: reduceRevealMotion ? 0 : 2000,
     reset: false,
   });
 
@@ -50,7 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
   sr.reveal('.skills-img', { delay: 400 });
   sr.reveal('.work-img', { interval: 200 });
   sr.reveal('.content2', { interval: 200 });
-  sr.reveal('.faq-container', { interval: 200 });
+  // Cover the newer sections without animating nested content twice.
+  sr.reveal('.section-title', {});
+  sr.reveal('.hero-eyebrow', {});
+  sr.reveal('.hero-description', { delay: 150 });
+  sr.reveal('.hero-secondary', { delay: 200 });
+  sr.reveal('.hero-stack', { delay: 250 });
+  sr.reveal('.hero-footer', { delay: 300 });
+  sr.reveal('.hero-art', { distance: '0px', delay: 200 });
+  sr.reveal('.about-container > .container', { distance: '0px' });
+  sr.reveal('.ribbon-showcase-frame', { distance: '0px' });
+  sr.reveal('.project-filter-card', { interval: 120, distance: reduceRevealMotion ? '0px' : '32px' });
+  sr.reveal('.faq-item', { interval: 120, distance: reduceRevealMotion ? '0px' : '32px' });
+  sr.reveal('.scroll-effect-footer', { distance: '0px' });
 
   // === Vue компонент для карточки (из background.js) ===
   Vue.config.devtools = true;
@@ -283,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function initHeader() {
       width = window.innerWidth;
       height = document.documentElement.scrollHeight / 2;
-      target = { x: width / 2, y: height / 2 };
+      target = { x: width / 2, y: Math.min(height / 2, window.innerHeight * 0.45) };
 
       largeHeader = document.getElementById('large-header');
       largeHeader.style.height = height + 'px';
@@ -405,23 +418,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function shiftPoint(p) {
-      TweenLite.to(p, 1 + 1 * Math.random(), {
-        x: p.originX - 50 + Math.random() * 100,
-        y: p.originY - 50 + Math.random() * 100,
-        ease: Circ.easeInOut,
-        onComplete: function () {
-          shiftPoint(p);
-        },
-      });
+      var targetX = p.originX - 50 + Math.random() * 100;
+      var targetY = p.originY - 50 + Math.random() * 100;
+      var duration = 1 + 1 * Math.random();
+
+      if (window.gsap) {
+        gsap.to(p, {
+          duration: duration,
+          x: targetX,
+          y: targetY,
+          ease: 'circ.inOut',
+          onComplete: function () {
+            shiftPoint(p);
+          },
+        });
+        return;
+      }
+
+      if (window.TweenLite) {
+        TweenLite.to(p, duration, {
+          x: targetX,
+          y: targetY,
+          ease: Circ.easeInOut,
+          onComplete: function () {
+            shiftPoint(p);
+          },
+        });
+      }
+    }
+
+    function getCanvasColorRgb() {
+      return document.documentElement.dataset.theme === 'light'
+        ? '116,96,143'
+        : '156,217,249';
     }
 
     function drawLines(p) {
       if (!p.active) return;
+      var rgb = getCanvasColorRgb();
       for (var i in p.closest) {
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p.closest[i].x, p.closest[i].y);
-        ctx.strokeStyle = 'rgba(156,217,249,' + p.active + ')';
+        ctx.strokeStyle = 'rgba(' + rgb + ',' + p.active + ')';
         ctx.stroke();
       }
     }
@@ -439,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!_this.active) return;
         ctx.beginPath();
         ctx.arc(_this.pos.x, _this.pos.y, _this.radius, 0, 2 * Math.PI, false);
-        ctx.fillStyle = 'rgba(156,217,249,' + _this.active + ')';
+        ctx.fillStyle = 'rgba(' + getCanvasColorRgb() + ',' + _this.active + ')';
         ctx.fill();
       };
     }

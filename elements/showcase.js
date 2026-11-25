@@ -3,12 +3,18 @@
 (() => {
   const row = document.querySelector('.con-cards');
   if (!row?.firstElementChild) return;
+  const next = row.closest('.work-container')?.querySelector('#next');
   let pending = 0;
   const updateEdges = () => {
     pending = 0;
     const bounds = row.getBoundingClientRect();
     row.classList.toggle('has-scroll-before', row.firstElementChild.getBoundingClientRect().left < bounds.left - 1);
-    row.classList.toggle('has-scroll-after', row.lastElementChild.getBoundingClientRect().right > bounds.right + 1);
+    const hasMore = row.lastElementChild.getBoundingClientRect().right > bounds.right + 1;
+    row.classList.toggle('has-scroll-after', hasMore);
+    if (next) {
+      next.disabled = !hasMore;
+      next.style.visibility = hasMore ? 'visible' : 'hidden';
+    }
   };
   const schedule = () => {
     if (!pending) pending = requestAnimationFrame(updateEdges);
@@ -17,57 +23,6 @@
   new ResizeObserver(schedule).observe(row);
   window.addEventListener('load', schedule, { once: true });
   updateEdges();
-})();
-
-/* Image slider adapted from https://codepen.io/MDJAmin/pen/GgpdKPy. */
-(() => {
-  const slider = document.querySelector('.landscape-slider');
-  if (!slider) return;
-  const slides = slider.querySelector('.landscape-slides');
-  const items = [...slides.children];
-  const counter = slider.querySelector('.landscape-counter');
-  let transitioning = false;
-  let start = null;
-
-  function update() {
-    const active = slides.children[1];
-    items.forEach(item => {
-      const selected = item === active;
-      item.setAttribute('aria-hidden', String(!selected));
-      item.inert = !selected;
-    });
-    counter.textContent = `${active.dataset.name} · ${items.indexOf(active) + 1} / ${items.length}`;
-  }
-
-  function move(direction) {
-    if (transitioning) return;
-    transitioning = true;
-    if (direction > 0) slides.append(slides.firstElementChild);
-    else slides.prepend(slides.lastElementChild);
-    update();
-    setTimeout(() => { transitioning = false; }, 500);
-  }
-
-  slider.querySelector('.landscape-next').addEventListener('click', () => move(1));
-  slider.querySelector('.landscape-prev').addEventListener('click', () => move(-1));
-  slider.addEventListener('keydown', event => {
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    event.preventDefault();
-    move(event.key === 'ArrowRight' ? 1 : -1);
-  });
-  slider.addEventListener('pointerdown', event => {
-    if (event.target.closest('a, button') || event.pointerType === 'mouse') return;
-    start = { x: event.clientX, y: event.clientY };
-  });
-  slider.addEventListener('pointerup', event => {
-    if (!start) return;
-    const dx = event.clientX - start.x;
-    const dy = event.clientY - start.y;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1);
-    start = null;
-  });
-  slider.addEventListener('pointercancel', () => { start = null; });
-  update();
 })();
 
 /* One native page scroll drives the ribbon, regardless of cursor position. */
@@ -126,8 +81,17 @@
   });
   window.addEventListener('message', event => {
     if (event.origin !== location.origin || event.source !== frame.contentWindow) return;
+    if (event.data?.type === 'ribbon-ready') notify();
     if (event.data?.type === 'ribbon-hover') section.style.cursor = event.data.active ? 'pointer' : '';
-    if (event.data?.type === 'ribbon-project') location.hash = 'work';
+    if (event.data?.type === 'ribbon-project') {
+      const shoppingUrl = 'https://www.figma.com/design/F6DogmD7gBJZ7CglXbnBss/Online-Shopping-App--Community-?node-id=1-2';
+      const figmaProjects = [shoppingUrl,
+        'https://www.figma.com/proto/z0x7tH5Ac9C6xRS9YNN6ob/Weather-App-UI-Design--Community-?node-id=2-2214',
+        'https://www.figma.com/proto/cGdZtnbHOCq5NXBA5ivVtJ/Interactive-Website--Figma-UI-Design-Tutorial-for-Beginners-%7C-Step-by-Step-Guide--Community-?node-id=0-1'];
+      if (figmaProjects.includes(event.data.url)) location.assign(event.data.url);
+      else if (['../../assets/projects/task-management.png', '../../assets/projects/aspen-travel.png', '../../assets/projects/cinema-booking.png', '../../assets/projects/food-delivery.png'].includes(event.data.url)) window.open(new URL(event.data.url, frame.src).href, '_blank', 'noopener,noreferrer');
+      else location.hash = 'work';
+    }
   });
 })();
 

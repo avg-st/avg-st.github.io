@@ -979,7 +979,7 @@ img {
 div.tp-dfwv {
   position: fixed;
 }
-/* Стили для "Avgust AI" с металлическим радужным градиентом */
+/* Стили для "AVG Dev" с металлическим радужным градиентом */
 .brand-gradient {
   
   /* Радужный градиент по диагонали */
@@ -1004,7 +1004,7 @@ div.tp-dfwv {
 
 /* Псевдоэлемент для металлического эффекта и усиленного осветления сверху */
 .brand-gradient::before {
-  content: "Avgust AI"; /* Повторяем текст */
+  content: attr(data-brand);
   position: absolute;
   top: 0;
   left: 0;
@@ -1023,7 +1023,7 @@ div.tp-dfwv {
 
 /* Псевдоэлемент для усиленного затемнения снизу до середины текста */
 .brand-gradient::after {
-  content: "Avgust AI"; /* Повторяем текст */
+  content: attr(data-brand);
   position: absolute;
   top: 0;
   left: 0;
@@ -1035,6 +1035,9 @@ div.tp-dfwv {
     rgba(0, 0, 0, 1) 100% /* Максимальное затемнение снизу */
   );
   color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  pointer-events: none;
   mix-blend-mode: multiply; /* Затемнение только текста */
   opacity: 0.9; /* Интенсивность */
 }
