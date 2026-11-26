@@ -4,17 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVG Dev. — Pavel Avgust</title>
+    <title>AVG Dev. — Mobile App Development</title>
     <link rel="icon" href="assets/avg-dev-mark.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css?v=project-edges-1">
     <link rel="stylesheet" href="elements/showcase.css?v=slider-width-fit-6">
     <link rel="stylesheet" href="elements/neon.css?v=5">
     <link rel="stylesheet" href="elements/project-grid.css?v=preview-5">
+    <link rel="stylesheet" href="elements/pedestal.css?v=3">
     <link rel="stylesheet" href="elements/theme.css?v=5">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
     <script>try { document.documentElement.dataset.theme = localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'; } catch { document.documentElement.dataset.theme = 'dark'; }</script>
     <script src="elements/theme.js" defer></script>
     <script src="elements/project-preview.js" defer></script>
     <script src="elements/showcase.js?v=shopping-project-2" defer></script>
+    <script type="module" src="elements/pedestal.js?v=3" defer></script>
     <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700|Raleway:500.700' rel='stylesheet'>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
@@ -58,7 +68,7 @@
                     <ul class="nav-list">
                         <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
                         <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-                        <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
+                        <li class="nav-item"><a href="#skills" class="nav-link">Services</a></li>
                         <li class="nav-item"><a href="#work" class="nav-link">Projects</a></li>
                         <li class="nav-item"><a href="#contact" class="nav-link">FAQ</a></li>
                     </ul>
@@ -76,15 +86,15 @@
         <main class="l-main">
             <section class="home bd-grid" id="home">
                 <div class="home-data">
-                    <p class="hero-eyebrow">PAVEL AVGUST <span>FRONTEND DEVELOPER</span></p>
-                    <h1 class="home-title">Interfaces.<br>Intelligence.<br><span class="hero-gradient">Impact.</span>
-                    </h1>
-                    <p class="hero-description">Thoughtful interfaces. Powerful engineering.<br>I turn complex ideas
-                        into digital experiences<br class="desktop-break"> that feel effortless.</p>
-                    <div class="hero-actions"><a href="#work" class="button">Explore my work</a><a
-                            href="https://avgust.zapier.app/" class="hero-secondary">Let’s build something</a></div>
-                    <div class="hero-stack"><span>React</span><span>TypeScript</span><span>Vue</span><span>AI
-                            integration</span></div>
+                        <p class="hero-eyebrow">AVG DEV <span>MOBILE APP DEVELOPMENT</span></p>
+                        <h1 class="home-title">Your App.<br>Your Brand.<br><span class="hero-gradient">Launched.</span>
+                        </h1>
+                        <p class="hero-description">Get a custom mobile app for your business —<br>without hiring a
+                            full-time developer.<br class="desktop-break"> Fast. Reliable. Yours.</p>
+                        <div class="hero-actions"><a href="#work" class="button">See what we build</a><a
+                                href="https://avgust.zapier.app/" class="hero-secondary">Start your project</a></div>
+                        <div class="hero-stack"><span>React Native</span><span>TypeScript</span><span>iOS &amp;
+                                Android</span><span>AI-powered</span></div>
                 </div>
 
                 <div class="hero-art" aria-label="Abstract orbital sculpture with interface and code panels" role="img">
@@ -95,27 +105,29 @@
                         <div class="orbit orbit-two"></div>
                         <div class="orbit orbit-three"></div><span class="orbit-satellite"></span>
                     </div>
-                    <div class="art-caption">HUMAN IDEAS. DIGITAL POSSIBILITIES.</div>
+                    <div class="art-caption">YOUR IDEA. OUR CODE. REAL RESULTS.</div>
                     <div class="glass-code">
-                        <div class="code-heading"><span class="window-dots">● ● ●</span><span>experience.tsx</span>
+                            <div class="code-heading"><span class="window-dots">● ● ●</span><span>your-app.tsx</span>
+                            </div>
+                            <code><span class="code-purple">const</span> yourApp = {<br>&nbsp; platform: <span class="code-cyan">"iOS &amp; Android"</span>,<br>&nbsp; delivery: <span class="code-cyan">"4–8 weeks"</span>,<br>&nbsp; overhead: <span class="code-purple">0</span><br>};<br><br><span class="code-comment">// No staff. No hassle. Just results.</span></code>
                         </div>
-                        <code><span class="code-purple">const</span> experience = {<br>&nbsp; design: <span class="code-cyan">"intentional"</span>,<br>&nbsp; interaction: <span class="code-cyan">"effortless"</span>,<br>&nbsp; intelligence: <span class="code-purple">true</span><br>};<br><br><span class="code-comment">// Built to make a difference.</span></code>
-                    </div>
-                    <div class="glass-feature"><span class="feature-icon">✧</span>
-                        <div><strong>From idea to interface</strong><span>Designed to connect. Built to perform.</span>
+                        <div class="glass-feature"><span class="feature-icon">✧</span>
+                                <div><strong>From brief to launch</strong><span>One developer. Full product. Zero
+                                        overhead.</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="home-social">
-                    <a href="https://www.linkedin.com/in/pavel-avgust/" class="home-social-icon"><i
-                            class='bx bxl-linkedin'></i></a>
-                    <a href="https://www.instagram.com/pavel.avg/" class="home-social-icon"><i
-                            class='bx bxl-instagram'></i></a>
-                    <a href="https://github.com/avg-st" class="home-social-icon"><i class='bx bxl-github'></i></a>
-                </div>
-                <div class="hero-footer"><span>CREATIVE MIND. ENGINEERING PRECISION.</span><a href="#about">Discover the
-                        person behind the pixels</a></div>
+                        <div class="home-social">
+                            <a href="https://www.linkedin.com/in/pavel-avgust/" class="home-social-icon"><i
+                                    class='bx bxl-linkedin'></i></a>
+                            <a href="https://www.instagram.com/pavel.avg/" class="home-social-icon"><i
+                                    class='bx bxl-instagram'></i></a>
+                            <a href="https://github.com/avg-st" class="home-social-icon"><i
+                                    class='bx bxl-github'></i></a>
+                        </div>
+                        <div class="hero-footer"><span>YOUR BUSINESS. OUR EXPERTISE. ONE APP.</span><a href="#about">Why
+                                businesses choose AVG Dev.</a></div>
 
 
             </section>
@@ -127,19 +139,19 @@
                     <div id="app" class="container">
                         <card data-image="avatar.webp">
                             <h1 slot="header">Pavel Avgust</h1>
-                            <p slot="content">Developer</p>
+                            <p slot="content">App Developer</p>
                         </card>
                     </div>
 
 
                     <div>
-                        <h2 class="about-subtitle">I'm Pavel Avgust</h2>
-                        <p class="about-text">Frontend Developer with deep expertise in JavaScript/TypeScript, React,
-                            Vue.js, and modern web technologies. I build scalable, performant, and user-friendly
-                            applications with a focus on clean architecture, best practices, and seamless UX.
-                            Additionally, I bring unique value through AI integrations and chatbot development,
-                            combining frontend excellence with intelligent automation to deliver comprehensive
-                            solutions.</p>
+                        <h2 class="about-subtitle">Why AVG Dev.?</h2>
+                        <p class="about-text">You need a mobile app — but hiring a full-time developer means salary,
+                            onboarding, management overhead, and months of delay. AVG Dev. is the smarter alternative.
+                            I build production-ready mobile apps for businesses: clean, scalable, and delivered on time.
+                            From the first screen to the App Store — you get the full product without the full-time
+                            cost. React Native, TypeScript, AI integrations, backend connectivity — everything your app
+                            needs to work and impress.</p>
                     </div>
                 </div>
             </section>
@@ -153,21 +165,20 @@
             </section>
 
             <section class="skills section" id="skills">
-                <h2 class="section-title">Skills</h2>
+                <h2 class="section-title">Services</h2>
 
                 <div class="skills-container bd-grid">
                     <div>
-                        <h2 class="skills-subtitle">Professional Skills</h2>
-                        <p class="skills-text">I craft high-performance web applications using modern JavaScript
-                            frameworks and best practices. My expertise spans the full frontend ecosystem—from
-                            pixel-perfect UI implementation with React, Vue.js, and TypeScript, to build tools, state
-                            management, and API integrations. I also bring added value through AI-powered solutions and
-                            chatbot development.</p>
+                        <h2 class="skills-subtitle">What Your App Gets</h2>
+                        <p class="skills-text">Every app I build is cross-platform, pixel-perfect, and production-ready.
+                            Your customers get a smooth native experience on both iOS and Android — no two separate
+                            codebases, no double the cost. From beautiful UI to real-time data, push notifications,
+                            and AI-powered features, your app will stand out and convert.</p>
 
                         <div class="skills-data">
                             <div class="skills-names">
                                 <i class='bx bxl-javascript skills-icon'></i>
-                                <span class="skills-name">JavaScript (ES6+) / TypeScript</span>
+                                <span class="skills-name">Cross-platform iOS &amp; Android App</span>
                             </div>
 
                             <div>
@@ -180,7 +191,7 @@
                         <div class="skills-data">
                             <div class="skills-names">
                                 <i class='bx bxl-react skills-icon'></i>
-                                <span class="skills-name">React / Next.js / Redux</span>
+                                <span class="skills-name">Custom UI / UX Design &amp; Interface</span>
                             </div>
 
                             <div>
@@ -193,11 +204,11 @@
                         <div class="skills-data">
                             <div class="skills-names">
                                 <i class='bx bxl-html5 skills-icon'></i>
-                                <span class="skills-name">HTML5 / CSS3 / SCSS / Tailwind</span>
+                                <span class="skills-name">Backend &amp; API Integration</span>
                             </div>
 
                             <div>
-                                <span class="skills-percentage">95%</span>
+                                <span class="skills-percentage">90%</span>
                             </div>
 
                             <div class="skills-bar skills-js"></div>
@@ -206,11 +217,11 @@
                         <div class="skills-data">
                             <div class="skills-names">
                                 <i class='bx bxl-vuejs skills-icon'></i>
-                                <span class="skills-name">Vue.js / Nuxt</span>
+                                <span class="skills-name">Admin Panel &amp; CRM Dashboard</span>
                             </div>
 
                             <div>
-                                <span class="skills-percentage">85%</span>
+                                <span class="skills-percentage">88%</span>
                             </div>
 
                             <div class="skills-bar skills-ux"></div>
@@ -219,11 +230,11 @@
                         <div class="skills-data">
                             <div class="skills-names">
                                 <i class='bx bxs-terminal skills-icon'></i>
-                                <span class="skills-name">Tools: Git, Webpack, Vite, npm/yarn, VS Code</span>
+                                <span class="skills-name">App Store &amp; Play Market Publishing</span>
                             </div>
 
                             <div>
-                                <span class="skills-percentage">90%</span>
+                                <span class="skills-percentage">85%</span>
                             </div>
 
                             <div class="skills-bar skills-tools"></div>
@@ -232,7 +243,7 @@
                         <div class="skills-data">
                             <div class="skills-names">
                                 <i class='bx bx-bot skills-icon'></i>
-                                <span class="skills-name">AI Integration & Chatbot Development</span>
+                                <span class="skills-name">AI Features &amp; Smart Automation</span>
                             </div>
 
                             <div>
@@ -250,303 +261,351 @@
             </section>
 
             <section class="work section" id="work">
-                <h2 class="section-title">Projects & Solutions</h2>
+                <h2 class="section-title">Apps &amp; Solutions</h2>
 
 
-                <section class="project-showcase" aria-label="Selected design projects">
-                    <div class="project-grid">
-                        <button class="project-filter-card" type="button" aria-label="View Bike Shopping App"
-                            aria-haspopup="dialog">
-                            <div class="project-filter-visual"><img src="assets/projects/bike-transparent.png" alt=""
-                                    loading="lazy"></div>
-                            <div class="project-filter-content">
-                                <p class="project-filter-category">Mobile commerce</p>
-                                <h3 class="project-filter-heading">Bike Shopping App</h3>
+                    <section class="project-showcase" aria-label="Selected mobile app projects">
+                        <div class="project-grid">
+                            <button class="project-filter-card" type="button" aria-label="View Bike Shopping App"
+                                aria-haspopup="dialog">
+                                <div class="project-filter-visual"><img src="assets/projects/bike-transparent.png"
+                                        alt="" loading="lazy"></div>
+                                <div class="project-filter-content">
+                                    <p class="project-filter-category">Mobile commerce</p>
+                                    <h3 class="project-filter-heading">Bike Shopping App</h3>
+                                </div>
+                            </button>
+                            <button class="project-filter-card" type="button" aria-label="View Aspen Travel App"
+                                aria-haspopup="dialog">
+                                <div class="project-filter-visual"><img src="assets/projects/aspen-travel.png" alt=""
+                                        loading="lazy"></div>
+                                <div class="project-filter-content">
+                                    <p class="project-filter-category">Travel &amp; discovery</p>
+                                    <h3 class="project-filter-heading">Aspen Travel App</h3>
+                                </div>
+                            </button>
+                            <button class="project-filter-card" type="button" aria-label="View Weather App"
+                                aria-haspopup="dialog">
+                                <div class="project-filter-visual"><img
+                                        src="assets/projects/weather-app-transparent.png" alt="" loading="lazy"></div>
+                                <div class="project-filter-content">
+                                    <p class="project-filter-category">Weather &amp; forecasts</p>
+                                    <h3 class="project-filter-heading">Weather App</h3>
+                                </div>
+                            </button>
+                            <button class="project-filter-card" type="button" aria-label="View Task Management"
+                                aria-haspopup="dialog">
+                                <div class="project-filter-visual"><img src="assets/projects/task-management.png" alt=""
+                                        loading="lazy"></div>
+                                <div class="project-filter-content">
+                                    <p class="project-filter-category">Productivity</p>
+                                    <h3 class="project-filter-heading">Task Management</h3>
+                                </div>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="pedestal-showcase" id="models" aria-label="Interactive 3D model pedestal">
+                        <div class="pedestal-shell">
+                            <aside class="pedestal-panel" aria-label="3D models list">
+                                <div class="pedestal-panel-header">
+                                    <p class="pedestal-panel-eyebrow">3D Collection</p>
+                                    <span class="pedestal-count">4</span>
+                                </div>
+                                <ul class="pedestal-list"></ul>
+                            </aside>
+
+                            <div class="pedestal-panel pedestal-stage">
+                                <canvas class="pedestal-canvas" aria-label="Interactive 3D pedestal viewport"></canvas>
+                                <div class="pedestal-stage-top">
+                                    <span class="pedestal-hint"><i class='bx bx-move'></i> Drag to rotate · Scroll to
+                                        zoom</span>
+                                    <div class="pedestal-controls">
+                                        <button class="pedestal-control-btn is-active" type="button"
+                                            data-pedestal-action="autorotate" aria-pressed="true"
+                                            aria-label="Toggle auto-rotation">
+                                            <i class='bx bx-revision'></i> Auto
+                                        </button>
+                                        <button class="pedestal-control-btn" type="button" data-pedestal-action="reset"
+                                            aria-label="Reset camera view">
+                                            <i class='bx bx-reset'></i> Reset
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="pedestal-loader" role="status" aria-live="polite">Loading 3D model…</div>
                             </div>
-                        </button>
-                        <button class="project-filter-card" type="button" aria-label="View Aspen Travel App"
-                            aria-haspopup="dialog">
-                            <div class="project-filter-visual"><img src="assets/projects/aspen-travel.png" alt=""
-                                    loading="lazy"></div>
-                            <div class="project-filter-content">
-                                <p class="project-filter-category">Travel & discovery</p>
-                                <h3 class="project-filter-heading">Aspen Travel App</h3>
+
+                            <aside class="pedestal-panel pedestal-info" aria-label="Selected model details">
+                                <div class="pedestal-panel-header">
+                                    <p class="pedestal-panel-eyebrow">Model Info</p>
+                                </div>
+                                <div class="pedestal-info-body">
+                                    <span class="pedestal-info-category"></span>
+                                    <h3 class="pedestal-info-title"></h3>
+                                    <p class="pedestal-info-desc"></p>
+                                    <div class="pedestal-specs"></div>
+                                    <div class="pedestal-tags"></div>
+                                </div>
+                            </aside>
+                        </div>
+                    </section>
+
+                    <div class="work-container">
+                        <div class="content2">
+                            <button id="prev" class="btn">
+                                <i class='bx bxs-chevron-left'></i>
+                            </button>
+                            <div class="con-cards">
+                                <div class="card2">
+                                    <div class="con-img">
+                                        <img src="1.webp" alt="">
+                                        <img class="blur" src="1.webp" alt="">
+                                    </div>
+                                    <div class="con-text">
+                                        <h2>
+                                            Lead Management App
+                                        </h2>
+                                        <p>
+                                            Your sales team stops losing leads. This app captures, tracks and routes
+                                            every
+                                            potential client automatically — synced with HubSpot and Salesforce in real
+                                            time.
+                                            Your managers always know who to call next and when.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card2">
+                                    <div class="con-img">
+                                        <img src="2.webp" alt="">
+                                        <img class="blur" src="2.webp" alt="">
+                                    </div>
+                                    <div class="con-text">
+                                        <h2>
+                                            CRM Analytics Dashboard
+                                        </h2>
+                                        <p>
+                                            See your business performance at a glance. Interactive sales charts, deal
+                                            tracking, automated alerts, and PDF reports — all in one app. Make
+                                            data-driven
+                                            decisions without opening a spreadsheet.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card2">
+                                    <div class="con-img">
+                                        <img src="3.webp" alt="">
+                                        <img class="blur" src="3.webp" alt="">
+                                    </div>
+                                    <div class="con-text">
+                                        <h2>
+                                            Content &amp; Marketing Platform
+                                        </h2>
+                                        <p>
+                                            Publish, schedule and analyze your content without an agency. AI-generated
+                                            posts,
+                                            social media scheduling, and campaign analytics — all from your phone. Cut
+                                            marketing costs and stay consistent across channels.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card2">
+                                    <div class="con-img">
+                                        <img src="4.webp" alt="">
+                                        <img class="blur" src="4.webp" alt="">
+                                    </div>
+                                    <div class="con-text">
+                                        <h2>
+                                            Client Support App
+                                        </h2>
+                                        <p>
+                                            Your customers get answers fast — your team stays organized. Smart ticket
+                                            routing, real-time notifications, and feedback collection built in. Resolve
+                                            issues before they become complaints.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card2">
+                                    <div class="con-img">
+                                        <img src="5.webp" alt="">
+                                        <img class="blur" src="5.webp" alt="">
+                                    </div>
+                                    <div class="con-text">
+                                        <h2>
+                                            AI Chat for Your Business
+                                        </h2>
+                                        <p>
+                                            A 24/7 AI assistant that answers questions, qualifies leads, and books
+                                            appointments — embedded directly in your app or website. Powered by ChatGPT.
+                                            Works while you sleep.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card2">
+                                    <div class="con-img">
+                                        <img src="6.webp" alt="">
+                                        <img class="blur" src="6.webp" alt="">
+                                    </div>
+                                    <div class="con-text">
+                                        <h2>
+                                            Business Operations Dashboard
+                                        </h2>
+                                        <p>
+                                            One screen to run your whole operation. KPI monitoring, role-based access
+                                            for
+                                            your team, automated workflows, and exportable reports. Clients who use it
+                                            report
+                                            40% faster decision-making.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                        </button>
-                        <button class="project-filter-card" type="button" aria-label="View Weather App"
-                            aria-haspopup="dialog">
-                            <div class="project-filter-visual"><img src="assets/projects/weather-app-transparent.png"
-                                    alt="" loading="lazy"></div>
-                            <div class="project-filter-content">
-                                <p class="project-filter-category">Weather & forecasts</p>
-                                <h3 class="project-filter-heading">Weather App</h3>
-                            </div>
-                        </button>
-                        <button class="project-filter-card" type="button" aria-label="View Task Management"
-                            aria-haspopup="dialog">
-                            <div class="project-filter-visual"><img src="assets/projects/task-management.png" alt=""
-                                    loading="lazy"></div>
-                            <div class="project-filter-content">
-                                <p class="project-filter-category">Productivity</p>
-                                <h3 class="project-filter-heading">Task Management</h3>
-                            </div>
-                        </button>
+                            <button id="next" class="btn" type="button" aria-label="Next projects">
+                                <i class='bx bxs-chevron-right'></i>
+                            </button>
+                        </div>
                     </div>
                 </section>
 
-                <div class="work-container">
-                    <div class="content2">
-                        <button id="prev" class="btn">
-                            <i class='bx bxs-chevron-left'></i>
-                        </button>
-                        <div class="con-cards">
-                            <div class="card2">
-                                <div class="con-img">
-                                    <img src="1.webp" alt="">
-                                    <img class="blur" src="1.webp" alt="">
-                                </div>
-                                <div class="con-text">
-                                    <h2>
-                                        Lead Management Dashboard
-                                    </h2>
-                                    <p>
-                                        Built a React-based lead management interface with real-time form handling, API
-                                        integrations to CRM platforms (HubSpot, Salesforce), and automated email
-                                        campaign triggers. Features include form validation, state management with
-                                        Redux, and responsive design.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card2">
-                                <div class="con-img">
-                                    <img src="2.webp" alt="">
-                                    <img class="blur" src="2.webp" alt="">
-                                </div>
-                                <div class="con-text">
-                                    <h2>
-                                        CRM Analytics Dashboard
-                                    </h2>
-                                    <p>
-                                        Developed an interactive sales dashboard using React, TypeScript, and Chart.js
-                                        with real-time data visualization. Integrated REST APIs for deal tracking,
-                                        automated notifications via WebSocket, and built document generation features
-                                        with PDF export.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card2">
-                                <div class="con-img">
-                                    <img src="3.webp" alt="">
-                                    <img class="blur" src="3.webp" alt="">
-                                </div>
-                                <div class="con-text">
-                                    <h2>
-                                        Content Management Platform
-                                    </h2>
-                                    <p>
-                                        Created a Next.js single-page application for marketing automation with
-                                        server-side rendering, AI-powered content generation integration, social media
-                                        scheduling UI, and campaign analytics dashboard. Optimized for Core Web Vitals
-                                        performance metrics.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card2">
-                                <div class="con-img">
-                                    <img src="4.webp" alt="">
-                                    <img class="blur" src="4.webp" alt="">
-                                </div>
-                                <div class="con-text">
-                                    <h2>
-                                        Support Ticket Management App
-                                    </h2>
-                                    <p>
-                                        Built a Vue.js-based support ticket management system with drag-and-drop
-                                        prioritization, real-time notifications, automated ticket routing, and
-                                        integrated feedback collection forms. Implemented optimistic UI updates and
-                                        offline mode with service workers.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card2">
-                                <div class="con-img">
-                                    <img src="5.webp" alt="">
-                                    <img class="blur" src="5.webp" alt="">
-                                </div>
-                                <div class="con-text">
-                                    <h2>
-                                        AI Chat Widget for Websites
-                                    </h2>
-                                    <p>
-                                        Developed a customizable chat widget using React and the ChatGPT API with
-                                        streaming responses, markdown rendering, conversation history, and lead
-                                        qualification flows. Features include typing indicators, theme customization,
-                                        and seamless integration with any website via script embed.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="card2">
-                                <div class="con-img">
-                                    <img src="6.webp" alt="">
-                                    <img class="blur" src="6.webp" alt="">
-                                </div>
-                                <div class="con-text">
-                                    <h2>
-                                        Admin Panel & Monitoring Dashboard
-                                    </h2>
-                                    <p>
-                                        Designed and built a comprehensive admin panel with React, Redux Toolkit, and
-                                        Recharts for data visualization. Features include role-based access control,
-                                        real-time KPI monitoring, exportable reports (CSV, PDF), and configurable
-                                        workflow automation — improving operational efficiency by 40%.
-                                    </p>
-                                </div>
-                            </div>
+                <section class="contact section" id="contact">
+                    <!-- FAQ SECTION -->
+                    <section class="faq-container">
+                        <h2 class="section-title">Frequently Asked Questions</h2>
+
+                        <!-- Скрытые SVG-символы -->
+                        <div style="visibility: hidden; position: absolute; width: 0; height: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg">
+                                <symbol viewBox="0 0 24 24" id="expand-more">
+                                    <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                </symbol>
+                                <symbol viewBox="0 0 24 24" id="close">
+                                    <path
+                                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                </symbol>
+                            </svg>
                         </div>
-                        <button id="next" class="btn" type="button" aria-label="Next projects">
-                            <i class='bx bxs-chevron-right'></i>
-                        </button>
-                    </div>
-                </div>
-            </section>
 
-            <section class="contact section" id="contact">
-                <!-- FAQ SECTION -->
-                <section class="faq-container">
-                    <h2 class="section-title">Frequently Asked Questions</h2>
+                        <!-- FAQ Items -->
+                        <details class="faq-item" open>
+                            <summary class="faq-summary" role="button" aria-expanded="true">
+                                How much does a mobile app cost?
+                                <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                    <use xlink:href="#expand-more" />
+                                </svg>
+                                <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                    <use xlink:href="#close" />
+                                </svg>
+                            </summary>
+                            <p class="faq-text">The cost depends on the scope, features, and complexity of your app. A
+                                focused MVP with core functionality typically starts at a fraction of what hiring a
+                                full-time developer costs for a year. After a free consultation I'll give you a clear
+                                quote — no vague estimates, no surprise invoices. You'll know the price before we start.
+                            </p>
+                        </details>
 
-                    <!-- Скрытые SVG-символы -->
-                    <div style="visibility: hidden; position: absolute; width: 0; height: 0;">
-                        <svg xmlns="http://www.w3.org/2000/svg">
-                            <symbol viewBox="0 0 24 24" id="expand-more">
-                                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
-                                <path d="M0 0h24v24H0z" fill="none" />
-                            </symbol>
-                            <symbol viewBox="0 0 24 24" id="close">
-                                <path
-                                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                                <path d="M0 0h24v24H0z" fill="none" />
-                            </symbol>
-                        </svg>
-                    </div>
+                        <details class="faq-item">
+                            <summary class="faq-summary" role="button" aria-expanded="false">
+                                How long does it take to build an app?
+                                <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                    <use xlink:href="#expand-more" />
+                                </svg>
+                                <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                    <use xlink:href="#close" />
+                                </svg>
+                            </summary>
+                            <p class="faq-text">Most projects are delivered in 4 to 8 weeks. A focused MVP can be ready
+                                even faster. The timeline depends on scope — the clearer your requirements, the faster
+                                we move. I'll give you a realistic schedule upfront and stick to it. No endless delays,
+                                no moving goalposts.</p>
+                        </details>
 
-                    <!-- FAQ Items -->
-                    <details class="faq-item" open>
-                        <summary class="faq-summary" role="button" aria-expanded="true">
-                            What is your main tech stack?
-                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
-                                <use xlink:href="#expand-more" />
-                            </svg>
-                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
-                                <use xlink:href="#close" />
-                            </svg>
-                        </summary>
-                        <p class="faq-text">I specialize in frontend development with JavaScript/TypeScript, React,
-                            Next.js, and Vue.js. For styling, I use CSS3, SCSS, Tailwind CSS, and CSS Modules. I'm
-                            experienced with state management solutions like Redux, Zustand, and Vuex/Pinia, and I work
-                            with modern build tools such as Webpack, Vite, and Turbopack.</p>
-                    </details>
+                        <details class="faq-item">
+                            <summary class="faq-summary" role="button" aria-expanded="false">
+                                Do I need to prepare technical specs?
+                                <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                    <use xlink:href="#expand-more" />
+                                </svg>
+                                <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                    <use xlink:href="#close" />
+                                </svg>
+                            </summary>
+                            <p class="faq-text">Not at all. You just need an idea and a problem you want to solve for
+                                your
+                                customers. I'll ask the right questions, help shape the product vision, and translate
+                                your
+                                business goals into a concrete app plan. No tech knowledge required on your side —
+                                that's exactly what you're hiring me for.</p>
+                        </details>
 
-                    <details class="faq-item">
-                        <summary class="faq-summary" role="button" aria-expanded="false">
-                            How do you approach project architecture?
-                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
-                                <use xlink:href="#expand-more" />
-                            </svg>
-                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
-                                <use xlink:href="#close" />
-                            </svg>
-                        </summary>
-                        <p class="faq-text">I prioritize clean, maintainable code following best practices like
-                            component-based architecture, SOLID principles, and design patterns. I favor functional
-                            components with hooks, custom hooks for reusability, and proper folder structure for
-                            scalability. Performance optimization through code splitting, lazy loading, and memoization
-                            is always part of my approach.</p>
-                    </details>
+                        <details class="faq-item">
+                            <summary class="faq-summary" role="button" aria-expanded="false">
+                                What if I need changes or new features after launch?
+                                <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                    <use xlink:href="#expand-more" />
+                                </svg>
+                                <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                    <use xlink:href="#close" />
+                                </svg>
+                            </summary>
+                            <p class="faq-text">Apps evolve as your business grows — that's completely normal. I offer
+                                ongoing support and development packages so you can add features, fix issues, or update
+                                the app as needed. You won't be left with a product you can't update. Everything is
+                                built
+                                to be maintainable and extendable from day one.</p>
+                        </details>
 
-                    <details class="faq-item">
-                        <summary class="faq-summary" role="button" aria-expanded="false">
-                            Do you work with backend technologies or APIs?
-                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
-                                <use xlink:href="#expand-more" />
-                            </svg>
-                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
-                                <use xlink:href="#close" />
-                            </svg>
-                        </summary>
-                        <p class="faq-text">Yes, I have solid experience integrating REST APIs and GraphQL endpoints.
-                            I'm comfortable working with server-side rendering (SSR), static site generation (SSG), and
-                            API routes in Next.js. I can also set up basic Node.js/Express servers and work with
-                            databases when needed for full-stack features.</p>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-summary" role="button" aria-expanded="false">
-                            What additional skills do you bring beyond frontend?
-                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
-                                <use xlink:href="#expand-more" />
-                            </svg>
-                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
-                                <use xlink:href="#close" />
-                            </svg>
-                        </summary>
-                        <p class="faq-text">Beyond frontend, I bring unique value through AI integration expertise —
-                            building chatbots, implementing LLM APIs (ChatGPT, Gemini, Claude), and creating automated
-                            workflows. I've developed solutions for business process automation using Zapier, Make, and
-                            n8n, which can be seamlessly embedded into web applications.</p>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary class="faq-summary" role="button" aria-expanded="false">
-                            What is your development and collaboration workflow?
-                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
-                                <use xlink:href="#expand-more" />
-                            </svg>
-                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
-                                <use xlink:href="#close" />
-                            </svg>
-                        </summary>
-                        <p class="faq-text">I use Git/GitHub for version control, follow feature-branch workflows, and
-                            practice code reviews. I'm experienced with Agile/Scrum methodologies, Jira/Trello for task
-                            management, and Figma/Storybook for design-to-development handoff. I prioritize clear
-                            communication, regular updates, and delivering quality results on time.</p>
-                    </details>
+                        <details class="faq-item">
+                            <summary class="faq-summary" role="button" aria-expanded="false">
+                                How do we start working together?
+                                <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                    <use xlink:href="#expand-more" />
+                                </svg>
+                                <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                    <use xlink:href="#close" />
+                                </svg>
+                            </summary>
+                            <p class="faq-text">Simple. Click "Start your project", fill in a short form describing your
+                                idea, and we'll schedule a free 30-minute call to align on goals and scope. After the
+                                call you receive a proposal with timeline and pricing. If it works for you — we start.
+                                No commitment required until you're ready.</p>
+                        </details>
 
         </main>
 
         <footer class="footer">
             <div class="scroll-effect-container" data-sync-scrollbar="true" data-animate="true" data-theme="dark">
                 <header class="scroll-effect-header">
-                    <h1 class="scroll-effect-headline fluid">Ready to<br />start?</h1>
+                    <h1 class="scroll-effect-headline fluid">Ready to<br />launch?</h1>
                 </header>
                 <main class="scroll-effect-main">
                     <section class="scroll-effect-section content fluid">
                         <h2 class="scroll-effect-title">
-                            <span aria-hidden="true">you can </span>
-                            <span class="scroll-effect-sr-only">you can ship things.</span>
+                            <span aria-hidden="true">your business can </span>
+                            <span class="scroll-effect-sr-only">your business can grow.</span>
                         </h2>
                         <ul class="scroll-effect-list" aria-hidden="true" style="--count: 22">
-                            <li class="scroll-effect-list-item" style="--i: 0">design.</li>
-                            <li class="scroll-effect-list-item" style="--i: 1">prototype.</li>
-                            <li class="scroll-effect-list-item" style="--i: 2">solve.</li>
-                            <li class="scroll-effect-list-item" style="--i: 3">build.</li>
-                            <li class="scroll-effect-list-item" style="--i: 4">develop.</li>
-                            <li class="scroll-effect-list-item" style="--i: 5">debug.</li>
-                            <li class="scroll-effect-list-item" style="--i: 6">learn.</li>
-                            <li class="scroll-effect-list-item" style="--i: 7">integrate.</li>
+                            <li class="scroll-effect-list-item" style="--i: 0">launch.</li>
+                            <li class="scroll-effect-list-item" style="--i: 1">grow.</li>
+                            <li class="scroll-effect-list-item" style="--i: 2">automate.</li>
+                            <li class="scroll-effect-list-item" style="--i: 3">convert.</li>
+                            <li class="scroll-effect-list-item" style="--i: 4">retain.</li>
+                            <li class="scroll-effect-list-item" style="--i: 5">monetize.</li>
+                            <li class="scroll-effect-list-item" style="--i: 6">scale.</li>
+                            <li class="scroll-effect-list-item" style="--i: 7">stand out.</li>
                             <li class="scroll-effect-list-item" style="--i: 8">ship.</li>
-                            <li class="scroll-effect-list-item" style="--i: 9">prompt.</li>
-                            <li class="scroll-effect-list-item" style="--i: 10">collaborate.</li>
-                            <li class="scroll-effect-list-item" style="--i: 11">create.</li>
-                            <li class="scroll-effect-list-item" style="--i: 12">inspire.</li>
-                            <li class="scroll-effect-list-item" style="--i: 13">implement.</li>
+                            <li class="scroll-effect-list-item" style="--i: 9">engage.</li>
+                            <li class="scroll-effect-list-item" style="--i: 10">expand.</li>
+                            <li class="scroll-effect-list-item" style="--i: 11">compete.</li>
+                            <li class="scroll-effect-list-item" style="--i: 12">impress.</li>
+                            <li class="scroll-effect-list-item" style="--i: 13">streamline.</li>
                             <li class="scroll-effect-list-item" style="--i: 14">innovate.</li>
-                            <li class="scroll-effect-list-item" style="--i: 15">test.</li>
+                            <li class="scroll-effect-list-item" style="--i: 15">connect.</li>
                             <li class="scroll-effect-list-item" style="--i: 16">optimize.</li>
-                            <li class="scroll-effect-list-item" style="--i: 17">streamline.</li>
-                            <li class="scroll-effect-list-item" style="--i: 18">visualize.</li>
+                            <li class="scroll-effect-list-item" style="--i: 17">differentiate.</li>
+                            <li class="scroll-effect-list-item" style="--i: 18">accelerate.</li>
                             <li class="scroll-effect-list-item" style="--i: 19">transform.</li>
-                            <li class="scroll-effect-list-item" style="--i: 20">scale.</li>
+                            <li class="scroll-effect-list-item" style="--i: 20">win.</li>
                             <li class="scroll-effect-list-item" style="--i: 21">do it.</li>
                         </ul>
                     </section>
@@ -581,26 +640,23 @@
 
 
 
-
-
-
     </div>
 
     <script>
         window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
+            const preloader = document.getElementById('preloader')
 
             // Добавим плавное скрытие
-            preloader.style.transition = 'opacity 0.5s ease';
-            preloader.style.opacity = '0';
+            preloader.style.transition = 'opacity 0.5s ease'
+            preloader.style.opacity = '0'
 
             // Удалим элемент из DOM через 500 мс (после анимации)
             setTimeout(() => {
                 if (preloader && preloader.parentNode) {
-                    preloader.parentNode.removeChild(preloader);
+                    preloader.parentNode.removeChild(preloader)
                 }
-            }, 500);
-        });
+            }, 500)
+        })
     </script>
 
 
