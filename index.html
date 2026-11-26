@@ -1,494 +1,610 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>AVG Dev. — Pavel Avgust</title>
-        <link rel="icon" href="assets/avg-dev-mark.svg" type="image/svg+xml">
-        <link rel="stylesheet" href="style.css?v=project-edges-1">
-        <link rel="stylesheet" href="elements/showcase.css?v=slider-width-fit-6">
-        <link rel="stylesheet" href="elements/neon.css?v=1">
-        <link rel="stylesheet" href="elements/project-grid.css?v=preview-2">
-        <link rel="stylesheet" href="elements/theme.css?v=1">
-        <script>try { document.documentElement.dataset.theme = localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'; } catch { document.documentElement.dataset.theme = 'dark'; }</script>
-        <script src="elements/theme.js" defer></script>
-        <script src="elements/project-preview.js" defer></script>
-        <script src="elements/showcase.js?v=shopping-project-2" defer></script>
-        <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700|Raleway:500.700' rel='stylesheet'>
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-      
-        <!-- Начальные стили для ScrollReveal -->
-      
-        <!-- Подключение зависимостей JavaScript -->
-        <script src="https://www.marcoguglie.it/Codepen/AnimatedHeaderBg/demo-1/js/TweenLite.min.js"></script>
-        <script src="gsap.min.js"></script>
-        <script src="ScrollTrigger.min.js"></script>
-        <script src="EasePack.min.js"></script>
-        <script src="vue.min.js"></script>
-        <script src="scrollreveal.js"></script>
-        <script src="main.js" defer></script>
-      </head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVG Dev. — Pavel Avgust</title>
+    <link rel="icon" href="assets/avg-dev-mark.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=project-edges-1">
+    <link rel="stylesheet" href="elements/showcase.css?v=slider-width-fit-6">
+    <link rel="stylesheet" href="elements/neon.css?v=5">
+    <link rel="stylesheet" href="elements/project-grid.css?v=preview-5">
+    <link rel="stylesheet" href="elements/theme.css?v=5">
+    <script>try { document.documentElement.dataset.theme = localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'; } catch { document.documentElement.dataset.theme = 'dark'; }</script>
+    <script src="elements/theme.js" defer></script>
+    <script src="elements/project-preview.js" defer></script>
+    <script src="elements/showcase.js?v=shopping-project-2" defer></script>
+    <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700|Raleway:500.700' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Начальные стили для ScrollReveal -->
+
+    <!-- Подключение зависимостей JavaScript -->
+    <script src="https://www.marcoguglie.it/Codepen/AnimatedHeaderBg/demo-1/js/TweenLite.min.js"></script>
+    <script src="gsap.min.js"></script>
+    <script src="ScrollTrigger.min.js"></script>
+    <script src="EasePack.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="scrollreveal.js"></script>
+    <script src="main.js" defer></script>
+</head>
+
 <body>
-      <!-- Лоадер -->
-<!-- Preloader -->
-<div id="preloader">
- <div class="circle"></div>
-  </div>
-  
+    <!-- Лоадер -->
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="circle"></div>
+    </div>
+
     <div class="home-img">
         <img src="linii.png" alt="image">
     </div>
 
     <div id="large-header" class="large-header">
         <canvas id="demo-canvas"></canvas>
-          <h1 class="main-title"> <span class="thin"></span></h1>
+        <h1 class="main-title"> <span class="thin"></span></h1>
 
-    <header class="l-header">
-        <nav class="nav bd-grid">
-            <div>
-                <a href="#home" class="nav-logo" aria-label="AVG Dev — home"><img class="brand-mark" src="assets/avg-dev-mark.svg" alt="" width="40" height="40"><span class="brand-name">AVG <span class="brand-dev">Dev</span><span class="brand-dot" aria-hidden="true">.</span></span></a>
-            </div>
-
-            <div class="nav-menu" id="nav-menu">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
-                    <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
-                    <li class="nav-item"><a href="#work" class="nav-link">Projects</a></li>
-                    <li class="nav-item"><a href="#contact" class="nav-link">FAQ</a></li>
-                </ul>
-            </div>
-
-            <button class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Dark theme" title="Switch theme"><img src="assets/porcelain-switch.svg" alt="" width="84" height="43"></button>
-            <div class="nav-toggle" id="nav-toggle">
-                <i class='bx bx-menu'></i>
-            </div>
-
-        </nav>
-    </header>
-
-    <main class="l-main">
-        <section class="home bd-grid" id="home">
-            <div class="home-data">
-                <p class="hero-eyebrow">PAVEL AVGUST <span>FRONTEND DEVELOPER</span></p>
-                <h1 class="home-title">Interfaces.<br>Intelligence.<br><span class="hero-gradient">Impact.</span></h1>
-                <p class="hero-description">Thoughtful interfaces. Powerful engineering.<br>I turn complex ideas into digital experiences<br class="desktop-break"> that feel effortless.</p>
-                <div class="hero-actions"><a href="#work" class="button">Explore my work</a><a href="https://avgust.zapier.app/" class="hero-secondary">Let’s build something</a></div>
-                <div class="hero-stack"><span>React</span><span>TypeScript</span><span>Vue</span><span>AI integration</span></div>
-            </div>
-
-            <div class="hero-art" aria-label="Abstract orbital sculpture with interface and code panels" role="img">
-                <div class="art-halo"></div>
-                <div class="orbital-system"><div class="orb-core"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><span class="orbit-satellite"></span></div>
-                <div class="art-caption">HUMAN IDEAS. DIGITAL POSSIBILITIES.</div>
-                <div class="glass-code"><div class="code-heading"><span class="window-dots">● ● ●</span><span>experience.tsx</span></div><code><span class="code-purple">const</span> experience = {<br>&nbsp; design: <span class="code-cyan">"intentional"</span>,<br>&nbsp; interaction: <span class="code-cyan">"effortless"</span>,<br>&nbsp; intelligence: <span class="code-purple">true</span><br>};<br><br><span class="code-comment">// Built to make a difference.</span></code></div>
-                <div class="glass-feature"><span class="feature-icon">✧</span><div><strong>From idea to interface</strong><span>Designed to connect. Built to perform.</span></div></div>
-            </div>
-
-            <div class="home-social">
-                <a href="https://www.linkedin.com/in/pavel-avgust/" class="home-social-icon"><i class='bx bxl-linkedin' ></i></a>
-                <a href="https://www.instagram.com/pavel.avg/" class="home-social-icon"><i class='bx bxl-instagram' ></i></a>
-                <a href="https://github.com/avg-st" class="home-social-icon"><i class='bx bxl-github' ></i></a>
-            </div>
-            <div class="hero-footer"><span>CREATIVE MIND. ENGINEERING PRECISION.</span><a href="#about">Discover the person behind the pixels</a></div>
-
-
-        </section>
-
-        <section class="about section" id="about">
-            <h2 class="section-title">About</h2>
-
-            <div class="about-container bd-grid">
-                <div id="app" class="container">
-                    <card data-image="avatar.webp">
-                      <h1 slot="header">Pavel Avgust</h1>
-                      <p slot="content">Developer</p>
-                    </card>
-                </div>
- 
-                
+        <header class="l-header">
+            <nav class="nav bd-grid">
                 <div>
-                    <h2 class="about-subtitle">I'm Pavel Avgust</h2>
-                    <p class="about-text">Frontend Developer with deep expertise in JavaScript/TypeScript, React, Vue.js, and modern web technologies. I build scalable, performant, and user-friendly applications with a focus on clean architecture, best practices, and seamless UX. Additionally, I bring unique value through AI integrations and chatbot development, combining frontend excellence with intelligent automation to deliver comprehensive solutions.</p>
+                    <a href="#home" class="nav-logo" aria-label="AVG Dev — home"><img class="brand-mark"
+                            src="assets/avg-dev-mark.svg" alt="" width="40" height="40"><span class="brand-name">AVG
+                            <span class="brand-dev">Dev</span><span class="brand-dot"
+                                aria-hidden="true">.</span></span></a>
                 </div>
-            </div>
-        </section>
 
-        <!-- Original gallery by Shakuro; isolated to protect the portfolio styles. -->
-        <section class="ribbon-showcase" id="ribbon-gallery" aria-label="3D project gallery. Use left and right arrow keys to explore." tabindex="0">
-            <iframe class="ribbon-showcase-frame" src="elements/ribbon/index.html"
-                title="Portfolio — 3D Project Gallery" loading="eager" height="680" tabindex="-1"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
-        </section>
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                        <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                        <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
+                        <li class="nav-item"><a href="#work" class="nav-link">Projects</a></li>
+                        <li class="nav-item"><a href="#contact" class="nav-link">FAQ</a></li>
+                    </ul>
+                </div>
 
-        <section class="skills section" id="skills">
-            <h2 class="section-title">Skills</h2>
+                <button class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Dark theme"
+                    title="Switch theme"><img src="assets/porcelain-switch.svg" alt="" width="84" height="43"></button>
+                <div class="nav-toggle" id="nav-toggle">
+                    <i class='bx bx-menu'></i>
+                </div>
 
-            <div class="skills-container bd-grid">
-                <div>
-                    <h2 class="skills-subtitle">Professional Skills</h2>
-                    <p class="skills-text">I craft high-performance web applications using modern JavaScript frameworks and best practices. My expertise spans the full frontend ecosystem—from pixel-perfect UI implementation with React, Vue.js, and TypeScript, to build tools, state management, and API integrations. I also bring added value through AI-powered solutions and chatbot development.</p>
+            </nav>
+        </header>
 
-                    <div class="skills-data">
-                        <div class="skills-names">
-                            <i class='bx bxl-javascript skills-icon' ></i>
-                            <span class="skills-name">JavaScript (ES6+) / TypeScript</span>
-                        </div>
+        <main class="l-main">
+            <section class="home bd-grid" id="home">
+                <div class="home-data">
+                    <p class="hero-eyebrow">PAVEL AVGUST <span>FRONTEND DEVELOPER</span></p>
+                    <h1 class="home-title">Interfaces.<br>Intelligence.<br><span class="hero-gradient">Impact.</span>
+                    </h1>
+                    <p class="hero-description">Thoughtful interfaces. Powerful engineering.<br>I turn complex ideas
+                        into digital experiences<br class="desktop-break"> that feel effortless.</p>
+                    <div class="hero-actions"><a href="#work" class="button">Explore my work</a><a
+                            href="https://avgust.zapier.app/" class="hero-secondary">Let’s build something</a></div>
+                    <div class="hero-stack"><span>React</span><span>TypeScript</span><span>Vue</span><span>AI
+                            integration</span></div>
+                </div>
 
-                        <div>
-                            <span class="skills-percentage">95%</span>
-                        </div>
-
-                        <div class="skills-bar skills-html"></div>
+                <div class="hero-art" aria-label="Abstract orbital sculpture with interface and code panels" role="img">
+                    <div class="art-halo"></div>
+                    <div class="orbital-system">
+                        <div class="orb-core"></div>
+                        <div class="orbit orbit-one"></div>
+                        <div class="orbit orbit-two"></div>
+                        <div class="orbit orbit-three"></div><span class="orbit-satellite"></span>
                     </div>
-
-                    <div class="skills-data">
-                        <div class="skills-names">
-                            <i class='bx bxl-react skills-icon' ></i>
-                            <span class="skills-name">React / Next.js / Redux</span>
+                    <div class="art-caption">HUMAN IDEAS. DIGITAL POSSIBILITIES.</div>
+                    <div class="glass-code">
+                        <div class="code-heading"><span class="window-dots">● ● ●</span><span>experience.tsx</span>
                         </div>
-
-                        <div>
-                            <span class="skills-percentage">92%</span>
-                        </div>
-
-                        <div class="skills-bar skills-css"></div>
+                        <code><span class="code-purple">const</span> experience = {<br>&nbsp; design: <span class="code-cyan">"intentional"</span>,<br>&nbsp; interaction: <span class="code-cyan">"effortless"</span>,<br>&nbsp; intelligence: <span class="code-purple">true</span><br>};<br><br><span class="code-comment">// Built to make a difference.</span></code>
                     </div>
-
-                    <div class="skills-data">
-                        <div class="skills-names">
-                            <i class='bx bxl-html5 skills-icon' ></i>
-                            <span class="skills-name">HTML5 / CSS3 / SCSS / Tailwind</span>
+                    <div class="glass-feature"><span class="feature-icon">✧</span>
+                        <div><strong>From idea to interface</strong><span>Designed to connect. Built to perform.</span>
                         </div>
-
-                        <div>
-                            <span class="skills-percentage">95%</span>
-                        </div>
-
-                        <div class="skills-bar skills-js"></div>
-                    </div>
-
-                    <div class="skills-data">
-                        <div class="skills-names">
-                            <i class='bx bxl-vuejs skills-icon' ></i>
-                            <span class="skills-name">Vue.js / Nuxt</span>
-                        </div>
-
-                        <div>
-                            <span class="skills-percentage">85%</span>
-                        </div>
-
-                        <div class="skills-bar skills-ux"></div>
-                    </div>
-
-                    <div class="skills-data">
-                        <div class="skills-names">
-                            <i class='bx bxs-terminal skills-icon' ></i>
-                            <span class="skills-name">Tools: Git, Webpack, Vite, npm/yarn, VS Code</span>
-                        </div>
-
-                        <div>
-                            <span class="skills-percentage">90%</span>
-                        </div>
-
-                        <div class="skills-bar skills-tools"></div>
-                    </div>
-
-                    <div class="skills-data">
-                        <div class="skills-names">
-                            <i class='bx bx-bot skills-icon' ></i>
-                            <span class="skills-name">AI Integration & Chatbot Development</span>
-                        </div>
-
-                        <div>
-                            <span class="skills-percentage">80%</span>
-                        </div>
-
-                        <div class="skills-bar skills-ai"></div>
                     </div>
                 </div>
 
-                <div>
-                    <img src="work.webp" alt="image" class="skills-img">
+                <div class="home-social">
+                    <a href="https://www.linkedin.com/in/pavel-avgust/" class="home-social-icon"><i
+                            class='bx bxl-linkedin'></i></a>
+                    <a href="https://www.instagram.com/pavel.avg/" class="home-social-icon"><i
+                            class='bx bxl-instagram'></i></a>
+                    <a href="https://github.com/avg-st" class="home-social-icon"><i class='bx bxl-github'></i></a>
                 </div>
-            </div>
-        </section>
+                <div class="hero-footer"><span>CREATIVE MIND. ENGINEERING PRECISION.</span><a href="#about">Discover the
+                        person behind the pixels</a></div>
 
-        <section class="work section" id="work">
-            <h2 class="section-title">Projects & Solutions</h2>
 
-        <!-- CSS Filter Cards by Steve (steveeeie), https://codepen.io/steveeeie/pen/NVWMEM -->
-        <section class="project-showcase" aria-label="Selected design projects">
-            <div class="project-grid">
-                <button class="project-filter-card" type="button" aria-label="View Bike Shopping App" aria-haspopup="dialog">
-                    <div class="project-filter-visual"><img src="assets/projects/bike-transparent.png" alt="" loading="lazy"></div>
-                    <div class="project-filter-content"><p class="project-filter-category">Mobile commerce</p><h3 class="project-filter-heading">Bike Shopping App</h3></div>
-                </button>
-                <button class="project-filter-card" type="button" aria-label="View Aspen Travel App" aria-haspopup="dialog">
-                    <div class="project-filter-visual"><img src="assets/projects/aspen-travel.png" alt="" loading="lazy"></div>
-                    <div class="project-filter-content"><p class="project-filter-category">Travel & discovery</p><h3 class="project-filter-heading">Aspen Travel App</h3></div>
-                </button>
-                <button class="project-filter-card" type="button" aria-label="View Weather App" aria-haspopup="dialog">
-                    <div class="project-filter-visual"><img src="assets/projects/weather-app-transparent.png" alt="" loading="lazy"></div>
-                    <div class="project-filter-content"><p class="project-filter-category">Weather & forecasts</p><h3 class="project-filter-heading">Weather App</h3></div>
-                </button>
-                <button class="project-filter-card" type="button" aria-label="View Task Management" aria-haspopup="dialog">
-                    <div class="project-filter-visual"><img src="assets/projects/task-management.png" alt="" loading="lazy"></div>
-                    <div class="project-filter-content"><p class="project-filter-category">Productivity</p><h3 class="project-filter-heading">Task Management</h3></div>
-                </button>
-            </div>
-        </section>
+            </section>
 
-            <div class="work-container">
-                <div class="content2">
-                    <button id="prev" class="btn">
-                        <i class='bx bxs-chevron-left'></i>
-                    </button>
-                    <div class="con-cards">
-                        <div class="card2">
-                            <div class="con-img">
-                                <img src="1.webp" alt="">
-                                <img class="blur" src="1.webp" alt="">
+            <section class="about section" id="about">
+                <h2 class="section-title">About</h2>
+
+                <div class="about-container bd-grid">
+                    <div id="app" class="container">
+                        <card data-image="avatar.webp">
+                            <h1 slot="header">Pavel Avgust</h1>
+                            <p slot="content">Developer</p>
+                        </card>
+                    </div>
+
+
+                    <div>
+                        <h2 class="about-subtitle">I'm Pavel Avgust</h2>
+                        <p class="about-text">Frontend Developer with deep expertise in JavaScript/TypeScript, React,
+                            Vue.js, and modern web technologies. I build scalable, performant, and user-friendly
+                            applications with a focus on clean architecture, best practices, and seamless UX.
+                            Additionally, I bring unique value through AI integrations and chatbot development,
+                            combining frontend excellence with intelligent automation to deliver comprehensive
+                            solutions.</p>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="ribbon-showcase" id="ribbon-gallery"
+                aria-label="3D project gallery. Use left and right arrow keys to explore." tabindex="0">
+                <iframe class="ribbon-showcase-frame" src="elements/ribbon/index.html"
+                    title="Portfolio — 3D Project Gallery" loading="eager" height="680" tabindex="-1"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+            </section>
+
+            <section class="skills section" id="skills">
+                <h2 class="section-title">Skills</h2>
+
+                <div class="skills-container bd-grid">
+                    <div>
+                        <h2 class="skills-subtitle">Professional Skills</h2>
+                        <p class="skills-text">I craft high-performance web applications using modern JavaScript
+                            frameworks and best practices. My expertise spans the full frontend ecosystem—from
+                            pixel-perfect UI implementation with React, Vue.js, and TypeScript, to build tools, state
+                            management, and API integrations. I also bring added value through AI-powered solutions and
+                            chatbot development.</p>
+
+                        <div class="skills-data">
+                            <div class="skills-names">
+                                <i class='bx bxl-javascript skills-icon'></i>
+                                <span class="skills-name">JavaScript (ES6+) / TypeScript</span>
                             </div>
-                            <div class="con-text">
-                                <h2>
-                                    Lead Management Dashboard
-                                </h2>
-                                <p>
-                                    Built a React-based lead management interface with real-time form handling, API integrations to CRM platforms (HubSpot, Salesforce), and automated email campaign triggers. Features include form validation, state management with Redux, and responsive design.
-                                </p>
+
+                            <div>
+                                <span class="skills-percentage">95%</span>
                             </div>
+
+                            <div class="skills-bar skills-html"></div>
                         </div>
-                        <div class="card2">
-                            <div class="con-img">
-                                <img src="2.webp" alt="">
-                                <img class="blur" src="2.webp" alt="">
+
+                        <div class="skills-data">
+                            <div class="skills-names">
+                                <i class='bx bxl-react skills-icon'></i>
+                                <span class="skills-name">React / Next.js / Redux</span>
                             </div>
-                            <div class="con-text">
-                                <h2>
-                                    CRM Analytics Dashboard
-                                </h2>
-                                <p>
-                                    Developed an interactive sales dashboard using React, TypeScript, and Chart.js with real-time data visualization. Integrated REST APIs for deal tracking, automated notifications via WebSocket, and built document generation features with PDF export.
-                                </p>
+
+                            <div>
+                                <span class="skills-percentage">92%</span>
                             </div>
+
+                            <div class="skills-bar skills-css"></div>
                         </div>
-                        <div class="card2">
-                            <div class="con-img">
-                                <img src="3.webp" alt="">
-                                <img class="blur" src="3.webp" alt="">
+
+                        <div class="skills-data">
+                            <div class="skills-names">
+                                <i class='bx bxl-html5 skills-icon'></i>
+                                <span class="skills-name">HTML5 / CSS3 / SCSS / Tailwind</span>
                             </div>
-                            <div class="con-text">
-                                <h2>
-                                    Content Management Platform
-                                </h2>
-                                <p>
-                                    Created a Next.js single-page application for marketing automation with server-side rendering, AI-powered content generation integration, social media scheduling UI, and campaign analytics dashboard. Optimized for Core Web Vitals performance metrics.
-                                </p>
+
+                            <div>
+                                <span class="skills-percentage">95%</span>
                             </div>
+
+                            <div class="skills-bar skills-js"></div>
                         </div>
-                        <div class="card2">
-                            <div class="con-img">
-                                <img src="4.webp" alt="">
-                                <img class="blur" src="4.webp" alt="">
+
+                        <div class="skills-data">
+                            <div class="skills-names">
+                                <i class='bx bxl-vuejs skills-icon'></i>
+                                <span class="skills-name">Vue.js / Nuxt</span>
                             </div>
-                            <div class="con-text">
-                                <h2>
-                                    Support Ticket Management App
-                                </h2>
-                                <p>
-                                    Built a Vue.js-based support ticket management system with drag-and-drop prioritization, real-time notifications, automated ticket routing, and integrated feedback collection forms. Implemented optimistic UI updates and offline mode with service workers.
-                                </p>
+
+                            <div>
+                                <span class="skills-percentage">85%</span>
                             </div>
+
+                            <div class="skills-bar skills-ux"></div>
                         </div>
-                        <div class="card2">
-                            <div class="con-img">
-                                <img src="5.webp" alt="">
-                                <img class="blur" src="5.webp" alt="">
+
+                        <div class="skills-data">
+                            <div class="skills-names">
+                                <i class='bx bxs-terminal skills-icon'></i>
+                                <span class="skills-name">Tools: Git, Webpack, Vite, npm/yarn, VS Code</span>
                             </div>
-                            <div class="con-text">
-                                <h2>
-                                    AI Chat Widget for Websites
-                                </h2>
-                                <p>
-                                    Developed a customizable chat widget using React and the ChatGPT API with streaming responses, markdown rendering, conversation history, and lead qualification flows. Features include typing indicators, theme customization, and seamless integration with any website via script embed.
-                                </p>
+
+                            <div>
+                                <span class="skills-percentage">90%</span>
                             </div>
+
+                            <div class="skills-bar skills-tools"></div>
                         </div>
-                        <div class="card2">
-                            <div class="con-img">
-                                <img src="6.webp" alt="">
-                                <img class="blur" src="6.webp" alt="">
+
+                        <div class="skills-data">
+                            <div class="skills-names">
+                                <i class='bx bx-bot skills-icon'></i>
+                                <span class="skills-name">AI Integration & Chatbot Development</span>
                             </div>
-                            <div class="con-text">
-                                <h2>
-                                    Admin Panel & Monitoring Dashboard
-                                </h2>
-                                <p>
-                                    Designed and built a comprehensive admin panel with React, Redux Toolkit, and Recharts for data visualization. Features include role-based access control, real-time KPI monitoring, exportable reports (CSV, PDF), and configurable workflow automation — improving operational efficiency by 40%.
-                                </p>
+
+                            <div>
+                                <span class="skills-percentage">80%</span>
                             </div>
+
+                            <div class="skills-bar skills-ai"></div>
                         </div>
                     </div>
-                    <button id="next" class="btn" type="button" aria-label="Next projects">
-                        <i class='bx bxs-chevron-right' ></i>
-                    </button>
-                </div>
-            </div>
-        </section>
 
-        <section class="contact section" id="contact">
-<!-- FAQ SECTION -->
-<section class="faq-container">
-    <h2 class="section-title">Frequently Asked Questions</h2>
-  
-    <!-- Скрытые SVG-символы -->
-    <div style="visibility: hidden; position: absolute; width: 0; height: 0;">
-      <svg xmlns="http://www.w3.org/2000/svg">
-        <symbol viewBox="0 0 24 24" id="expand-more">
-          <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
-          <path d="M0 0h24v24H0z" fill="none"/>
-        </symbol>
-        <symbol viewBox="0 0 24 24" id="close">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          <path d="M0 0h24v24H0z" fill="none"/>
-        </symbol>
-      </svg>
+                    <div>
+                        <img src="work.webp" alt="image" class="skills-img">
+                    </div>
+                </div>
+            </section>
+
+            <section class="work section" id="work">
+                <h2 class="section-title">Projects & Solutions</h2>
+
+
+                <section class="project-showcase" aria-label="Selected design projects">
+                    <div class="project-grid">
+                        <button class="project-filter-card" type="button" aria-label="View Bike Shopping App"
+                            aria-haspopup="dialog">
+                            <div class="project-filter-visual"><img src="assets/projects/bike-transparent.png" alt=""
+                                    loading="lazy"></div>
+                            <div class="project-filter-content">
+                                <p class="project-filter-category">Mobile commerce</p>
+                                <h3 class="project-filter-heading">Bike Shopping App</h3>
+                            </div>
+                        </button>
+                        <button class="project-filter-card" type="button" aria-label="View Aspen Travel App"
+                            aria-haspopup="dialog">
+                            <div class="project-filter-visual"><img src="assets/projects/aspen-travel.png" alt=""
+                                    loading="lazy"></div>
+                            <div class="project-filter-content">
+                                <p class="project-filter-category">Travel & discovery</p>
+                                <h3 class="project-filter-heading">Aspen Travel App</h3>
+                            </div>
+                        </button>
+                        <button class="project-filter-card" type="button" aria-label="View Weather App"
+                            aria-haspopup="dialog">
+                            <div class="project-filter-visual"><img src="assets/projects/weather-app-transparent.png"
+                                    alt="" loading="lazy"></div>
+                            <div class="project-filter-content">
+                                <p class="project-filter-category">Weather & forecasts</p>
+                                <h3 class="project-filter-heading">Weather App</h3>
+                            </div>
+                        </button>
+                        <button class="project-filter-card" type="button" aria-label="View Task Management"
+                            aria-haspopup="dialog">
+                            <div class="project-filter-visual"><img src="assets/projects/task-management.png" alt=""
+                                    loading="lazy"></div>
+                            <div class="project-filter-content">
+                                <p class="project-filter-category">Productivity</p>
+                                <h3 class="project-filter-heading">Task Management</h3>
+                            </div>
+                        </button>
+                    </div>
+                </section>
+
+                <div class="work-container">
+                    <div class="content2">
+                        <button id="prev" class="btn">
+                            <i class='bx bxs-chevron-left'></i>
+                        </button>
+                        <div class="con-cards">
+                            <div class="card2">
+                                <div class="con-img">
+                                    <img src="1.webp" alt="">
+                                    <img class="blur" src="1.webp" alt="">
+                                </div>
+                                <div class="con-text">
+                                    <h2>
+                                        Lead Management Dashboard
+                                    </h2>
+                                    <p>
+                                        Built a React-based lead management interface with real-time form handling, API
+                                        integrations to CRM platforms (HubSpot, Salesforce), and automated email
+                                        campaign triggers. Features include form validation, state management with
+                                        Redux, and responsive design.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card2">
+                                <div class="con-img">
+                                    <img src="2.webp" alt="">
+                                    <img class="blur" src="2.webp" alt="">
+                                </div>
+                                <div class="con-text">
+                                    <h2>
+                                        CRM Analytics Dashboard
+                                    </h2>
+                                    <p>
+                                        Developed an interactive sales dashboard using React, TypeScript, and Chart.js
+                                        with real-time data visualization. Integrated REST APIs for deal tracking,
+                                        automated notifications via WebSocket, and built document generation features
+                                        with PDF export.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card2">
+                                <div class="con-img">
+                                    <img src="3.webp" alt="">
+                                    <img class="blur" src="3.webp" alt="">
+                                </div>
+                                <div class="con-text">
+                                    <h2>
+                                        Content Management Platform
+                                    </h2>
+                                    <p>
+                                        Created a Next.js single-page application for marketing automation with
+                                        server-side rendering, AI-powered content generation integration, social media
+                                        scheduling UI, and campaign analytics dashboard. Optimized for Core Web Vitals
+                                        performance metrics.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card2">
+                                <div class="con-img">
+                                    <img src="4.webp" alt="">
+                                    <img class="blur" src="4.webp" alt="">
+                                </div>
+                                <div class="con-text">
+                                    <h2>
+                                        Support Ticket Management App
+                                    </h2>
+                                    <p>
+                                        Built a Vue.js-based support ticket management system with drag-and-drop
+                                        prioritization, real-time notifications, automated ticket routing, and
+                                        integrated feedback collection forms. Implemented optimistic UI updates and
+                                        offline mode with service workers.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card2">
+                                <div class="con-img">
+                                    <img src="5.webp" alt="">
+                                    <img class="blur" src="5.webp" alt="">
+                                </div>
+                                <div class="con-text">
+                                    <h2>
+                                        AI Chat Widget for Websites
+                                    </h2>
+                                    <p>
+                                        Developed a customizable chat widget using React and the ChatGPT API with
+                                        streaming responses, markdown rendering, conversation history, and lead
+                                        qualification flows. Features include typing indicators, theme customization,
+                                        and seamless integration with any website via script embed.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card2">
+                                <div class="con-img">
+                                    <img src="6.webp" alt="">
+                                    <img class="blur" src="6.webp" alt="">
+                                </div>
+                                <div class="con-text">
+                                    <h2>
+                                        Admin Panel & Monitoring Dashboard
+                                    </h2>
+                                    <p>
+                                        Designed and built a comprehensive admin panel with React, Redux Toolkit, and
+                                        Recharts for data visualization. Features include role-based access control,
+                                        real-time KPI monitoring, exportable reports (CSV, PDF), and configurable
+                                        workflow automation — improving operational efficiency by 40%.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="next" class="btn" type="button" aria-label="Next projects">
+                            <i class='bx bxs-chevron-right'></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact section" id="contact">
+                <!-- FAQ SECTION -->
+                <section class="faq-container">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+
+                    <!-- Скрытые SVG-символы -->
+                    <div style="visibility: hidden; position: absolute; width: 0; height: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg">
+                            <symbol viewBox="0 0 24 24" id="expand-more">
+                                <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" />
+                                <path d="M0 0h24v24H0z" fill="none" />
+                            </symbol>
+                            <symbol viewBox="0 0 24 24" id="close">
+                                <path
+                                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                <path d="M0 0h24v24H0z" fill="none" />
+                            </symbol>
+                        </svg>
+                    </div>
+
+                    <!-- FAQ Items -->
+                    <details class="faq-item" open>
+                        <summary class="faq-summary" role="button" aria-expanded="true">
+                            What is your main tech stack?
+                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                <use xlink:href="#expand-more" />
+                            </svg>
+                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                <use xlink:href="#close" />
+                            </svg>
+                        </summary>
+                        <p class="faq-text">I specialize in frontend development with JavaScript/TypeScript, React,
+                            Next.js, and Vue.js. For styling, I use CSS3, SCSS, Tailwind CSS, and CSS Modules. I'm
+                            experienced with state management solutions like Redux, Zustand, and Vuex/Pinia, and I work
+                            with modern build tools such as Webpack, Vite, and Turbopack.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-summary" role="button" aria-expanded="false">
+                            How do you approach project architecture?
+                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                <use xlink:href="#expand-more" />
+                            </svg>
+                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                <use xlink:href="#close" />
+                            </svg>
+                        </summary>
+                        <p class="faq-text">I prioritize clean, maintainable code following best practices like
+                            component-based architecture, SOLID principles, and design patterns. I favor functional
+                            components with hooks, custom hooks for reusability, and proper folder structure for
+                            scalability. Performance optimization through code splitting, lazy loading, and memoization
+                            is always part of my approach.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-summary" role="button" aria-expanded="false">
+                            Do you work with backend technologies or APIs?
+                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                <use xlink:href="#expand-more" />
+                            </svg>
+                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                <use xlink:href="#close" />
+                            </svg>
+                        </summary>
+                        <p class="faq-text">Yes, I have solid experience integrating REST APIs and GraphQL endpoints.
+                            I'm comfortable working with server-side rendering (SSR), static site generation (SSG), and
+                            API routes in Next.js. I can also set up basic Node.js/Express servers and work with
+                            databases when needed for full-stack features.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-summary" role="button" aria-expanded="false">
+                            What additional skills do you bring beyond frontend?
+                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                <use xlink:href="#expand-more" />
+                            </svg>
+                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                <use xlink:href="#close" />
+                            </svg>
+                        </summary>
+                        <p class="faq-text">Beyond frontend, I bring unique value through AI integration expertise —
+                            building chatbots, implementing LLM APIs (ChatGPT, Gemini, Claude), and creating automated
+                            workflows. I've developed solutions for business process automation using Zapier, Make, and
+                            n8n, which can be seamlessly embedded into web applications.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-summary" role="button" aria-expanded="false">
+                            What is your development and collaboration workflow?
+                            <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation">
+                                <use xlink:href="#expand-more" />
+                            </svg>
+                            <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation">
+                                <use xlink:href="#close" />
+                            </svg>
+                        </summary>
+                        <p class="faq-text">I use Git/GitHub for version control, follow feature-branch workflows, and
+                            practice code reviews. I'm experienced with Agile/Scrum methodologies, Jira/Trello for task
+                            management, and Figma/Storybook for design-to-development handoff. I prioritize clear
+                            communication, regular updates, and delivering quality results on time.</p>
+                    </details>
+
+        </main>
+
+        <footer class="footer">
+            <div class="scroll-effect-container" data-sync-scrollbar="true" data-animate="true" data-theme="dark">
+                <header class="scroll-effect-header">
+                    <h1 class="scroll-effect-headline fluid">Ready to<br />start?</h1>
+                </header>
+                <main class="scroll-effect-main">
+                    <section class="scroll-effect-section content fluid">
+                        <h2 class="scroll-effect-title">
+                            <span aria-hidden="true">you can </span>
+                            <span class="scroll-effect-sr-only">you can ship things.</span>
+                        </h2>
+                        <ul class="scroll-effect-list" aria-hidden="true" style="--count: 22">
+                            <li class="scroll-effect-list-item" style="--i: 0">design.</li>
+                            <li class="scroll-effect-list-item" style="--i: 1">prototype.</li>
+                            <li class="scroll-effect-list-item" style="--i: 2">solve.</li>
+                            <li class="scroll-effect-list-item" style="--i: 3">build.</li>
+                            <li class="scroll-effect-list-item" style="--i: 4">develop.</li>
+                            <li class="scroll-effect-list-item" style="--i: 5">debug.</li>
+                            <li class="scroll-effect-list-item" style="--i: 6">learn.</li>
+                            <li class="scroll-effect-list-item" style="--i: 7">integrate.</li>
+                            <li class="scroll-effect-list-item" style="--i: 8">ship.</li>
+                            <li class="scroll-effect-list-item" style="--i: 9">prompt.</li>
+                            <li class="scroll-effect-list-item" style="--i: 10">collaborate.</li>
+                            <li class="scroll-effect-list-item" style="--i: 11">create.</li>
+                            <li class="scroll-effect-list-item" style="--i: 12">inspire.</li>
+                            <li class="scroll-effect-list-item" style="--i: 13">implement.</li>
+                            <li class="scroll-effect-list-item" style="--i: 14">innovate.</li>
+                            <li class="scroll-effect-list-item" style="--i: 15">test.</li>
+                            <li class="scroll-effect-list-item" style="--i: 16">optimize.</li>
+                            <li class="scroll-effect-list-item" style="--i: 17">streamline.</li>
+                            <li class="scroll-effect-list-item" style="--i: 18">visualize.</li>
+                            <li class="scroll-effect-list-item" style="--i: 19">transform.</li>
+                            <li class="scroll-effect-list-item" style="--i: 20">scale.</li>
+                            <li class="scroll-effect-list-item" style="--i: 21">do it.</li>
+                        </ul>
+                    </section>
+                    <section class="scroll-effect-section">
+                        <h2 class="scroll-effect-title fluid">With&nbsp;</h2>
+                        <h2 class="scroll-effect-title fluid brand-gradient" data-brand="AVG Dev.">AVG Dev.</h2>
+                    </section>
+                </main>
+                <footer class="scroll-effect-footer">
+
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/pl.avgust/" class="footer-icon"><i
+                                class='bx bxl-facebook'></i></a>
+                        <a href="https://www.instagram.com/pavel.avg/" class="footer-icon"><i
+                                class='bx bxl-instagram'></i></a>
+                        <a href="https://www.threads.net/@pavel.avg" class="footer-icon" aria-label="Threads">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="1.5rem" height="1.5rem"
+                                fill="currentColor">
+                                <path
+                                    d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7443 97.3355 44.7443 97.222 44.7443C82.2364 44.7443 69.7731 51.1409 62.102 62.7807L75.881 72.2328C81.6116 63.5383 90.6052 61.6848 97.2286 61.6848C97.3051 61.6848 97.3819 61.6848 97.4576 61.6855C105.707 61.7381 111.932 64.1366 115.961 68.814C118.893 72.2193 120.854 76.925 121.825 82.8638C114.511 81.6207 106.601 81.2385 98.145 81.7233C74.3247 83.0954 59.0111 96.9879 60.0396 116.292C60.5615 126.084 65.4397 134.508 73.775 140.011C80.8224 144.663 89.899 146.938 99.3323 146.423C111.79 145.74 121.563 140.987 128.381 132.296C133.559 125.696 136.834 117.143 138.28 106.366C144.217 109.949 148.617 114.664 151.047 120.332C155.179 129.967 155.42 145.8 142.501 158.708C131.182 170.016 117.576 174.908 97.0135 175.059C74.2042 174.89 56.9538 167.575 45.7381 153.317C35.2355 139.966 29.8077 120.682 29.6052 96C29.8077 71.3178 35.2355 52.0336 45.7381 38.6827C56.9538 24.4249 74.2039 17.11 97.0132 16.9405C119.988 17.1113 137.539 24.4614 149.184 38.788C154.894 45.8136 159.199 54.6488 162.037 64.9503L178.184 60.6422C174.744 47.9622 169.331 37.0357 161.965 27.974C147.036 9.60668 125.202 0.195148 97.0695 0H96.9569C68.8816 0.19447 47.2921 9.6418 32.7883 28.0793C19.8819 44.4864 13.2244 67.3157 13.0007 95.9325L13 96L13.0007 96.0675C13.2244 124.684 19.8819 147.514 32.7883 163.921C47.2921 182.358 68.8816 191.806 96.9569 192H97.0695C122.03 191.827 139.624 185.292 154.118 170.811C173.081 151.866 172.51 128.119 166.26 113.541C161.776 103.087 153.227 94.5962 141.537 88.9883ZM98.4405 129.507C88.0005 130.095 77.1544 125.409 76.6196 115.372C76.2232 107.93 81.9158 99.626 99.0812 98.6368C101.047 98.5234 102.976 98.468 104.871 98.468C111.106 98.468 116.939 99.0737 122.242 100.233C120.264 124.935 108.662 128.946 98.4405 129.507Z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <p>&#169; 2026 Copyright all rights reserved</p>
+                </footer>
+
+            </div>
+
+
+        </footer>
+
+
+
+
+
+
     </div>
-  
-<!-- FAQ Items -->
-<details class="faq-item" open>
-    <summary class="faq-summary" role="button" aria-expanded="true">
-      What is your main tech stack?
-      <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation"><use xlink:href="#expand-more"/></svg>
-      <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation"><use xlink:href="#close"/></svg>
-    </summary>
-    <p class="faq-text">I specialize in frontend development with JavaScript/TypeScript, React, Next.js, and Vue.js. For styling, I use CSS3, SCSS, Tailwind CSS, and CSS Modules. I'm experienced with state management solutions like Redux, Zustand, and Vuex/Pinia, and I work with modern build tools such as Webpack, Vite, and Turbopack.</p>
-  </details>
-  
-  <details class="faq-item">
-    <summary class="faq-summary" role="button" aria-expanded="false">
-      How do you approach project architecture?
-      <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation"><use xlink:href="#expand-more"/></svg>
-      <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation"><use xlink:href="#close"/></svg>
-    </summary>
-    <p class="faq-text">I prioritize clean, maintainable code following best practices like component-based architecture, SOLID principles, and design patterns. I favor functional components with hooks, custom hooks for reusability, and proper folder structure for scalability. Performance optimization through code splitting, lazy loading, and memoization is always part of my approach.</p>
-  </details>
-  
-  <details class="faq-item">
-    <summary class="faq-summary" role="button" aria-expanded="false">
-      Do you work with backend technologies or APIs?
-      <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation"><use xlink:href="#expand-more"/></svg>
-      <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation"><use xlink:href="#close"/></svg>
-    </summary>
-    <p class="faq-text">Yes, I have solid experience integrating REST APIs and GraphQL endpoints. I'm comfortable working with server-side rendering (SSR), static site generation (SSG), and API routes in Next.js. I can also set up basic Node.js/Express servers and work with databases when needed for full-stack features.</p>
-  </details>
-  
-  <details class="faq-item">
-    <summary class="faq-summary" role="button" aria-expanded="false">
-      What additional skills do you bring beyond frontend?
-      <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation"><use xlink:href="#expand-more"/></svg>
-      <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation"><use xlink:href="#close"/></svg>
-    </summary>
-    <p class="faq-text">Beyond frontend, I bring unique value through AI integration expertise — building chatbots, implementing LLM APIs (ChatGPT, Gemini, Claude), and creating automated workflows. I've developed solutions for business process automation using Zapier, Make, and n8n, which can be seamlessly embedded into web applications.</p>
-  </details>
-  
-  <details class="faq-item">
-    <summary class="faq-summary" role="button" aria-expanded="false">
-      What is your development and collaboration workflow?
-      <svg class="faq-icon faq-icon-expand" width="24" height="24" role="presentation"><use xlink:href="#expand-more"/></svg>
-      <svg class="faq-icon faq-icon-close" width="24" height="24" role="presentation"><use xlink:href="#close"/></svg>
-    </summary>
-    <p class="faq-text">I use Git/GitHub for version control, follow feature-branch workflows, and practice code reviews. I'm experienced with Agile/Scrum methodologies, Jira/Trello for task management, and Figma/Storybook for design-to-development handoff. I prioritize clear communication, regular updates, and delivering quality results on time.</p>
-  </details>
-  
-    </main>
 
-    <footer class="footer">
-<div class="scroll-effect-container" data-sync-scrollbar="true" data-animate="true" data-theme="dark">
-  <header class="scroll-effect-header">
-    <h1 class="scroll-effect-headline fluid">Ready to<br />start?</h1>
-  </header>
-  <main class="scroll-effect-main">
-    <section class="scroll-effect-section content fluid">
-      <h2 class="scroll-effect-title">
-        <span aria-hidden="true">you can </span>
-        <span class="scroll-effect-sr-only">you can ship things.</span>
-      </h2>
-      <ul class="scroll-effect-list" aria-hidden="true" style="--count: 22">
-        <li class="scroll-effect-list-item" style="--i: 0">design.</li>
-        <li class="scroll-effect-list-item" style="--i: 1">prototype.</li>
-        <li class="scroll-effect-list-item" style="--i: 2">solve.</li>
-        <li class="scroll-effect-list-item" style="--i: 3">build.</li>
-        <li class="scroll-effect-list-item" style="--i: 4">develop.</li>
-        <li class="scroll-effect-list-item" style="--i: 5">debug.</li>
-        <li class="scroll-effect-list-item" style="--i: 6">learn.</li>
-        <li class="scroll-effect-list-item" style="--i: 7">integrate.</li>
-        <li class="scroll-effect-list-item" style="--i: 8">ship.</li>
-        <li class="scroll-effect-list-item" style="--i: 9">prompt.</li>
-        <li class="scroll-effect-list-item" style="--i: 10">collaborate.</li>
-        <li class="scroll-effect-list-item" style="--i: 11">create.</li>
-        <li class="scroll-effect-list-item" style="--i: 12">inspire.</li>
-        <li class="scroll-effect-list-item" style="--i: 13">implement.</li>
-        <li class="scroll-effect-list-item" style="--i: 14">innovate.</li>
-        <li class="scroll-effect-list-item" style="--i: 15">test.</li>
-        <li class="scroll-effect-list-item" style="--i: 16">optimize.</li>
-        <li class="scroll-effect-list-item" style="--i: 17">streamline.</li>
-        <li class="scroll-effect-list-item" style="--i: 18">visualize.</li>
-        <li class="scroll-effect-list-item" style="--i: 19">transform.</li>
-        <li class="scroll-effect-list-item" style="--i: 20">scale.</li>
-        <li class="scroll-effect-list-item" style="--i: 21">do it.</li>
-      </ul>
-    </section>
-    <section class="scroll-effect-section">
-        <h2 class="scroll-effect-title fluid">With&nbsp;</h2>
-            <h2 class="scroll-effect-title fluid brand-gradient" data-brand="AVG Dev.">AVG Dev.</h2>
-    </section>
-  </main>
-  <footer class="scroll-effect-footer">
+    <script>
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
 
-    <div class="footer-social">
-        <a href="https://www.facebook.com/pl.avgust/" class="footer-icon"><i class='bx bxl-facebook'></i></a>
-        <a href="https://www.instagram.com/pavel.avg/" class="footer-icon"><i class='bx bxl-instagram' ></i></a>
-        <a href="https://www.threads.net/@pavel.avg" class="footer-icon" aria-label="Threads">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="1.5rem" height="1.5rem" fill="currentColor">
-              <path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7443 97.3355 44.7443 97.222 44.7443C82.2364 44.7443 69.7731 51.1409 62.102 62.7807L75.881 72.2328C81.6116 63.5383 90.6052 61.6848 97.2286 61.6848C97.3051 61.6848 97.3819 61.6848 97.4576 61.6855C105.707 61.7381 111.932 64.1366 115.961 68.814C118.893 72.2193 120.854 76.925 121.825 82.8638C114.511 81.6207 106.601 81.2385 98.145 81.7233C74.3247 83.0954 59.0111 96.9879 60.0396 116.292C60.5615 126.084 65.4397 134.508 73.775 140.011C80.8224 144.663 89.899 146.938 99.3323 146.423C111.79 145.74 121.563 140.987 128.381 132.296C133.559 125.696 136.834 117.143 138.28 106.366C144.217 109.949 148.617 114.664 151.047 120.332C155.179 129.967 155.42 145.8 142.501 158.708C131.182 170.016 117.576 174.908 97.0135 175.059C74.2042 174.89 56.9538 167.575 45.7381 153.317C35.2355 139.966 29.8077 120.682 29.6052 96C29.8077 71.3178 35.2355 52.0336 45.7381 38.6827C56.9538 24.4249 74.2039 17.11 97.0132 16.9405C119.988 17.1113 137.539 24.4614 149.184 38.788C154.894 45.8136 159.199 54.6488 162.037 64.9503L178.184 60.6422C174.744 47.9622 169.331 37.0357 161.965 27.974C147.036 9.60668 125.202 0.195148 97.0695 0H96.9569C68.8816 0.19447 47.2921 9.6418 32.7883 28.0793C19.8819 44.4864 13.2244 67.3157 13.0007 95.9325L13 96L13.0007 96.0675C13.2244 124.684 19.8819 147.514 32.7883 163.921C47.2921 182.358 68.8816 191.806 96.9569 192H97.0695C122.03 191.827 139.624 185.292 154.118 170.811C173.081 151.866 172.51 128.119 166.26 113.541C161.776 103.087 153.227 94.5962 141.537 88.9883ZM98.4405 129.507C88.0005 130.095 77.1544 125.409 76.6196 115.372C76.2232 107.93 81.9158 99.626 99.0812 98.6368C101.047 98.5234 102.976 98.468 104.871 98.468C111.106 98.468 116.939 99.0737 122.242 100.233C120.264 124.935 108.662 128.946 98.4405 129.507Z"/>
-            </svg>
-          </a>
-            </div>
+            // Добавим плавное скрытие
+            preloader.style.transition = 'opacity 0.5s ease';
+            preloader.style.opacity = '0';
 
-    <p>&#169; 2026 Copyright all rights reserved</p></footer>
-
-</div>
-
-
-    </footer>
-
-
-
-
-    
-
-</div>
-
-<script>
-    window.addEventListener('load', () => {
-      const preloader = document.getElementById('preloader');
-      
-      // Добавим плавное скрытие
-      preloader.style.transition = 'opacity 0.5s ease';
-      preloader.style.opacity = '0';
-  
-      // Удалим элемент из DOM через 500 мс (после анимации)
-      setTimeout(() => {
-        if (preloader && preloader.parentNode) {
-          preloader.parentNode.removeChild(preloader);
-        }
-      }, 500);
-    });
-  </script>
+            // Удалим элемент из DOM через 500 мс (после анимации)
+            setTimeout(() => {
+                if (preloader && preloader.parentNode) {
+                    preloader.parentNode.removeChild(preloader);
+                }
+            }, 500);
+        });
+    </script>
 
 
 
 </body>
+
 </html>

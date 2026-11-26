@@ -288,6 +288,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // === Canvas анимация фона (из background.js) ===
   (function () {
     var width, height, largeHeader, canvas, ctx, points, target, animateHeader = true;
+    var pulses = [];
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var darkPalette = [
+      [189, 136, 247], // #bd88f7
+      [159, 122, 255], // #9f7aff
+      [104, 221, 217], // #68ddd9
+    ];
+    var lightPalette = [
+      [142, 67, 184],  // #8e43b8
+      [101, 90, 196],  // #655ac4
+      [28, 141, 146],  // #1c8d92
+    ];
 
     initHeader();
     initAnimation();
@@ -311,7 +323,14 @@ document.addEventListener('DOMContentLoaded', () => {
         for (var y = 0; y < height; y = y + height / 30) {
           var px = x + Math.random() * width / 20;
           var py = y + Math.random() * height / 20;
-          var p = { x: px, originX: px, y: py, originY: py };
+          var p = {
+            x: px,
+            originX: px,
+            y: py,
+            originY: py,
+            phase: px * 0.004 + py * 0.004 + Math.random() * 1.5,
+            pulseGlow: 0,
+          };
           points.push(p);
         }
       }
@@ -392,27 +411,62 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    function hasPulseBetween(a, b) {
+      for (var i = 0; i < pulses.length; i++) {
+        var pulse = pulses[i];
+        if ((pulse.from === a && pulse.to === b) || (pulse.from === b && pulse.to === a)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     function animate() {
       if (animateHeader) {
+        var now = performance.now() * 0.001;
         ctx.clearRect(0, 0, width, height);
         for (var i in points) {
-          if (Math.abs(getDistance(target, points[i])) < 4000) {
-            points[i].active = 0.3;
-            points[i].circle.active = 0.6;
-          } else if (Math.abs(getDistance(target, points[i])) < 20000) {
-            points[i].active = 0.1;
-            points[i].circle.active = 0.3;
-          } else if (Math.abs(getDistance(target, points[i])) < 40000) {
-            points[i].active = 0.02;
-            points[i].circle.active = 0.1;
+          var p = points[i];
+          var wasActive = p.active > 0;
+          var dist = Math.abs(getDistance(target, p));
+          if (dist < 5500) {
+            p.active = 0.44;
+            p.circle.active = 0.85;
+          } else if (dist < 24000) {
+            p.active = 0.22;
+            p.circle.active = 0.48;
+          } else if (dist < 48000) {
+            p.active = 0.08;
+            p.circle.active = 0.2;
           } else {
-            points[i].active = 0;
-            points[i].circle.active = 0;
+            p.active = 0;
+            p.circle.active = 0;
           }
 
-          drawLines(points[i]);
-          points[i].circle.draw();
+          // Запускаем один сигнал в момент возникновения связи (не более 3 одновременно)
+          if (!reduceMotion && !wasActive && p.active > 0 && p.closest && p.closest.length && pulses.length < 3) {
+            var neighbor = p.closest[Math.floor(Math.random() * p.closest.length)];
+            if (!hasPulseBetween(p, neighbor)) {
+              pulses.push({
+                from: p,
+                to: neighbor,
+                progress: 0,
+                speed: 0.036,
+              });
+            }
+          }
+
+          if (p.pulseGlow > 0.01) {
+            p.pulseGlow *= 0.92;
+          } else {
+            p.pulseGlow = 0;
+          }
+
+          drawLines(p, now);
+          p.circle.draw(now);
         }
+
+        drawPulses(now);
       }
       requestAnimationFrame(animate);
     }
@@ -447,21 +501,95 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    function getCanvasColorRgb() {
-      return document.documentElement.dataset.theme === 'light'
-        ? '116,96,143'
-        : '156,217,249';
+    // Плавно переливаем цвет по палитре текущей темы
+    function getPaletteRgb(phase, timeSec) {
+      var isLight = document.documentElement.dataset.theme === 'light';
+      var palette = isLight ? lightPalette : darkPalette;
+      var t = (Math.sin(timeSec * 0.75 + (phase || 0)) * 0.5 + 0.5) * (palette.length - 1);
+      var idx = Math.floor(t);
+      var nextIdx = Math.min(idx + 1, palette.length - 1);
+      var frac = t - idx;
+      var c1 = palette[idx];
+      var c2 = palette[nextIdx];
+      var r = Math.round(c1[0] + (c2[0] - c1[0]) * frac);
+      var g = Math.round(c1[1] + (c2[1] - c1[1]) * frac);
+      var b = Math.round(c1[2] + (c2[2] - c1[2]) * frac);
+      return r + ',' + g + ',' + b;
     }
 
-    function drawLines(p) {
+    function drawLines(p, now) {
       if (!p.active) return;
-      var rgb = getCanvasColorRgb();
+      var rgbFrom = getPaletteRgb(p.phase, now);
       for (var i in p.closest) {
+        var neighbor = p.closest[i];
+        var rgbTo = getPaletteRgb(neighbor.phase, now);
+        var grad = ctx.createLinearGradient(p.x, p.y, neighbor.x, neighbor.y);
+        var alpha = Math.min(1, p.active + p.pulseGlow * 0.25);
+        grad.addColorStop(0, 'rgba(' + rgbFrom + ',' + alpha + ')');
+        grad.addColorStop(1, 'rgba(' + rgbTo + ',' + alpha + ')');
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p.closest[i].x, p.closest[i].y);
-        ctx.strokeStyle = 'rgba(' + rgb + ',' + p.active + ')';
+        ctx.lineTo(neighbor.x, neighbor.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1;
         ctx.stroke();
+      }
+    }
+
+    // Отрисовываем деликатные электрические сигналы вдоль связей
+    function drawPulses(now) {
+      if (!pulses.length) return;
+      var isLight = document.documentElement.dataset.theme === 'light';
+      for (var i = pulses.length - 1; i >= 0; i--) {
+        var pulse = pulses[i];
+        pulse.progress += pulse.speed;
+
+        if (pulse.progress >= 1) {
+          pulse.to.pulseGlow = 0.55;
+          pulses.splice(i, 1);
+          continue;
+        }
+
+        var dx = pulse.to.x - pulse.from.x;
+        var dy = pulse.to.y - pulse.from.y;
+        var len = Math.hypot(dx, dy) || 1;
+        var nx = -dy / len;
+        var ny = dx / len;
+
+        var x = pulse.from.x + dx * pulse.progress;
+        var y = pulse.from.y + dy * pulse.progress;
+        var tailProgress = Math.max(0, pulse.progress - 0.22);
+        var tx = pulse.from.x + dx * tailProgress;
+        var ty = pulse.from.y + dy * tailProgress;
+        var rgb = getPaletteRgb(pulse.from.phase + pulse.progress * 1.5, now);
+        var peakAlpha = isLight ? 0.36 : 0.44;
+
+        // Строим тонкий зигзаг электрического разряда по направлению движения
+        var tailGrad = ctx.createLinearGradient(tx, ty, x, y);
+        tailGrad.addColorStop(0, 'rgba(' + rgb + ',0)');
+        tailGrad.addColorStop(0.75, 'rgba(' + rgb + ',' + peakAlpha + ')');
+        tailGrad.addColorStop(1, 'rgba(' + rgb + ',' + (peakAlpha * 0.85) + ')');
+
+        var segments = 4;
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        for (var s = 1; s < segments; s++) {
+          var frac = s / segments;
+          var jitter = (Math.random() - 0.5) * 3.2;
+          var px = tx + (x - tx) * frac + nx * jitter;
+          var py = ty + (y - ty) * frac + ny * jitter;
+          ctx.lineTo(px, py);
+        }
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = tailGrad;
+        ctx.lineWidth = 1.25;
+        ctx.stroke();
+
+        // Небольшая искра на острие сигнала
+        ctx.beginPath();
+        ctx.arc(x, y, 1.1, 0, 2 * Math.PI, false);
+        ctx.fillStyle = 'rgba(' + rgb + ',' + peakAlpha + ')';
+        ctx.fill();
       }
     }
 
@@ -474,11 +602,22 @@ document.addEventListener('DOMContentLoaded', () => {
         _this.color = color || null;
       })();
 
-      this.draw = function () {
-        if (!_this.active) return;
+      this.draw = function (now) {
+        if (!_this.active && !_this.pos.pulseGlow) return;
+        var glow = _this.pos.pulseGlow || 0;
+        var rgb = getPaletteRgb(_this.pos.phase, now || 0);
+        var alpha = Math.min(1, (_this.active || 0) + glow * 0.6);
+
+        if (glow > 0.05) {
+          ctx.beginPath();
+          ctx.arc(_this.pos.x, _this.pos.y, _this.radius + 2.2 * glow, 0, 2 * Math.PI, false);
+          ctx.fillStyle = 'rgba(' + rgb + ',' + (0.16 * glow) + ')';
+          ctx.fill();
+        }
+
         ctx.beginPath();
-        ctx.arc(_this.pos.x, _this.pos.y, _this.radius, 0, 2 * Math.PI, false);
-        ctx.fillStyle = 'rgba(' + getCanvasColorRgb() + ',' + _this.active + ')';
+        ctx.arc(_this.pos.x, _this.pos.y, _this.radius + glow * 0.6, 0, 2 * Math.PI, false);
+        ctx.fillStyle = 'rgba(' + rgb + ',' + alpha + ')';
         ctx.fill();
       };
     }

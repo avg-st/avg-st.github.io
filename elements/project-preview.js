@@ -17,7 +17,8 @@
   floatingImage.className = 'project-hover-image'
   floatingImage.alt = ''
   floatingImage.setAttribute('aria-hidden', 'true')
-  document.body.append(floatingImage)
+  // Помещаем в тот же контекст наложения, что и .l-header (z-index: 100), чтобы картинка (z-index: 90) всегда была под шапкой
+  ;(document.getElementById('large-header') || document.body).append(floatingImage)
 
   let active = null
   let hovering = null
@@ -26,6 +27,7 @@
   let hoverFrame = 0
   let animationTimer = 0
   let cleanupTransition = null
+  let lastPointer = null
 
   // Отменяем активное ожидание завершения CSS-перехода
   const clearTransitionWait = () => {
@@ -84,13 +86,17 @@
     animationTimer = setTimeout(finish, durationMs + 50)
   }
 
-  // Вычисляем целевой transform для перемещения изображения в центр экрана
+  // Вычисляем целевой transform для перемещения изображения в центр свободной области под шапкой
   const getTargetTransform = card => {
     const source = card.querySelector('img')
     const rect = source.getBoundingClientRect()
-    const scale = Math.min(innerWidth * .8 / rect.width, innerHeight * .8 / rect.height, 2.8)
+    const header = document.querySelector('.l-header')
+    const safeTop = header ? Math.max(0, header.getBoundingClientRect().bottom + 16) : 0
+    const availableHeight = Math.max(120, innerHeight - safeTop - 24)
+    const scale = Math.min(innerWidth * .8 / rect.width, availableHeight * .88 / rect.height, 2.8)
+    const targetCenterY = safeTop + availableHeight / 2
     const x = innerWidth / 2 - rect.left - rect.width / 2
-    const y = innerHeight / 2 - rect.top - rect.height / 2
+    const y = targetCenterY - rect.top - rect.height / 2
     return { rect, source, transform: `translate(${x}px, ${y}px) scale(${scale})` }
   }
 
@@ -129,35 +135,51 @@
 
     hoverFrame = requestAnimationFrame(() => {
       hoverFrame = 0
-      if (desiredCard !== card || dialog.open) {
-        hovering = null
-        phase = 'idle'
-        return
-      }
+      // Прерываем только при принудительном сбросе (скролл, ресайз, открытие диалога)
+      if (phase !== 'entering' || hovering !== card || dialog.open) return
       // В одном кадре скрываем оригинал и показываем клон, чтобы не было мерцания
       card.classList.add('is-image-hovered')
       floatingImage.classList.add('is-visible', 'is-expanded')
       floatingImage.style.transform = transform
 
       waitForTransformEnd(() => {
-        if (phase !== 'entering') return
+        if (phase !== 'entering' || hovering !== card) return
         phase = 'shown'
         reconcileHover()
       })
     })
   }
 
+  // Синхронизируем позицию клона с карточкой при скролле без прерывания анимации
+  const syncFloatingPosition = () => {
+    if (!hovering || phase === 'idle') return
+    const { rect, transform } = getTargetTransform(hovering)
+    floatingImage.style.left = `${rect.left}px`
+    floatingImage.style.top = `${rect.top}px`
+
+    if (phase === 'shown') {
+      floatingImage.style.transition = 'none'
+      floatingImage.style.transform = transform
+      void floatingImage.offsetWidth
+      floatingImage.style.transition = ''
+    }
+  }
+
   // Запуск плавного возврата изображения обратно в карточку
   const returnHover = () => {
-    if (!hovering) return
+    if (!hovering || phase !== 'shown') return
+    const card = hovering
+    const { rect } = getTargetTransform(card)
+    floatingImage.style.left = `${rect.left}px`
+    floatingImage.style.top = `${rect.top}px`
     phase = 'leaving'
     floatingImage.classList.remove('is-expanded')
     floatingImage.style.transform = 'none'
 
     waitForTransformEnd(() => {
-      if (phase !== 'leaving') return
+      if (phase !== 'leaving' || hovering !== card) return
       // В одном кадре возвращаем видимость оригиналу и скрываем клон
-      hovering?.classList.remove('is-image-hovered')
+      card.classList.remove('is-image-hovered')
       floatingImage.classList.remove('is-visible')
       hovering = null
       phase = 'idle'
@@ -168,28 +190,17 @@
   function reconcileHover() {
     if (dialog.open) return
 
-    // Если курсор вернулся на ту же карточку во время возврата — разворачиваем анимацию обратно в центр
-    if (phase === 'leaving' && desiredCard && desiredCard === hovering) {
-      phase = 'entering'
-      const { transform } = getTargetTransform(hovering)
-      floatingImage.classList.add('is-expanded')
-      floatingImage.style.transform = transform
-      waitForTransformEnd(() => {
-        if (phase !== 'entering') return
-        phase = 'shown'
-        reconcileHover()
-      })
+    // Пока идёт анимация раскрытия или возврата — не перебиваем её, ждём завершения
+    if (phase === 'entering' || phase === 'leaving') return
+
+    if (phase === 'shown') {
+      if (desiredCard !== hovering) returnHover()
       return
     }
 
-    if (hovering === desiredCard) return
-
-    if (hovering) {
-      if (phase !== 'leaving') returnHover()
-      return
+    if (phase === 'idle' && desiredCard) {
+      showHover(desiredCard)
     }
-
-    if (desiredCard) showHover(desiredCard)
   }
 
   const open = card => {
@@ -228,7 +239,32 @@
     document.documentElement.classList.remove('project-preview-open')
     active?.focus({ preventScroll:true })
   })
-  window.addEventListener('scroll', hideHover, { passive:true })
-  window.addEventListener('resize', hideHover, { passive:true })
+  const handleScroll = () => {
+    syncFloatingPosition()
+    if (!lastPointer) return
+    const underPointer = document.elementFromPoint(lastPointer.x, lastPointer.y)?.closest('.project-filter-card') || null
+    if (underPointer !== desiredCard) {
+      desiredCard = underPointer
+      reconcileHover()
+    }
+  }
+
+  window.addEventListener('pointermove', event => {
+    if (event.pointerType === 'mouse') {
+      lastPointer = { x: event.clientX, y: event.clientY }
+    }
+  }, { passive: true })
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('resize', hideHover, { passive: true })
+  window.addEventListener('blur', () => {
+    lastPointer = null
+    desiredCard = null
+    reconcileHover()
+  })
+  document.addEventListener('pointerleave', () => {
+    lastPointer = null
+    desiredCard = null
+    reconcileHover()
+  })
   hover.addEventListener('change', hideHover)
 })()
