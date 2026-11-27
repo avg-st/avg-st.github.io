@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="elements/project-grid.css?v=preview-5">
     <link rel="stylesheet" href="elements/pedestal.css?v=3">
     <link rel="stylesheet" href="elements/theme.css?v=5">
+    <link rel="stylesheet" href="elements/hero-3d.css?v=weightless-2">
+    <script src="elements/hero-3d.js" defer></script>
     <script type="importmap">
     {
         "imports": {
@@ -31,13 +33,17 @@
     <!-- Начальные стили для ScrollReveal -->
 
     <!-- Подключение зависимостей JavaScript -->
-    <script src="https://www.marcoguglie.it/Codepen/AnimatedHeaderBg/demo-1/js/TweenLite.min.js"></script>
+
     <script src="gsap.min.js"></script>
     <script src="ScrollTrigger.min.js"></script>
     <script src="EasePack.min.js"></script>
     <script src="vue.min.js"></script>
     <script src="scrollreveal.js"></script>
+    <script>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('depth-enabled');</script>
+    <link rel="stylesheet" href="elements/depth-scroll.css?v=1">
     <script src="main.js" defer></script>
+    <script src="elements/depth-scroll.js?v=1" defer></script>
+    <script type="module" src="elements/space-flight.js?v=1"></script>
 </head>
 
 <body>
@@ -52,7 +58,7 @@
     </div>
 
     <div id="large-header" class="large-header">
-        <canvas id="demo-canvas"></canvas>
+
         <h1 class="main-title"> <span class="thin"></span></h1>
 
         <header class="l-header">
@@ -85,7 +91,7 @@
 
         <main class="l-main">
             <section class="home bd-grid" id="home">
-                <div class="home-data">
+                <div class="home-data"><div class="hero-depth-data">
                         <p class="hero-eyebrow">AVG DEV <span>MOBILE APP DEVELOPMENT</span></p>
                         <h1 class="home-title">Your App.<br>Your Brand.<br><span class="hero-gradient">Launched.</span>
                         </h1>
@@ -97,8 +103,9 @@
                                 Android</span><span>AI-powered</span></div>
                 </div>
 
+                </div>
                 <div class="hero-art" aria-label="Abstract orbital sculpture with interface and code panels" role="img">
-                    <div class="art-halo"></div>
+                    <div class="hero-depth-art">                    <div class="art-halo"></div>
                     <div class="orbital-system">
                         <div class="orb-core"></div>
                         <div class="orbit orbit-one"></div>
@@ -117,6 +124,7 @@
                                 </div>
                             </div>
                         </div>
+                </div>
 
                         <div class="home-social">
                             <a href="https://www.linkedin.com/in/pavel-avgust/" class="home-social-icon"><i

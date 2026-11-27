@@ -48,6 +48,7 @@
   });
 
   const motion = {
+    entrance: 1,
     offset: 0, velocity: 0,
     scrollOffset: 0, targetScrollOffset: 0,
     pointerX: 0, pointerY: 0, parallaxX: 0, parallaxY: 0,
@@ -144,6 +145,11 @@
   window.addEventListener("message", event => {
     if (event.origin !== location.origin || event.source !== window.parent) return;
     const data = event.data;
+    if (data?.type === 'ribbon-entrance' && Number.isFinite(data.progress)) {
+      motion.entrance = Math.max(0, Math.min(1, data.progress));
+      conveyor?.draw(motion);
+      return;
+    }
     if (data?.type === 'portfolio-theme' && ['light', 'dark'].includes(data.theme)) {
       document.documentElement.dataset.theme = data.theme;
       conveyor?.draw(motion);
@@ -303,7 +309,7 @@ function conveyorPoint(t) {
     nx: nx / normalLength, nz: nz / normalLength };
 }
 
-function buildConveyorGeometry(segments = 512) {
+function buildConveyorGeometry(segments = 2048) {
   const { height, length } = ribbonLayout();
   const tileWidth = height * 4 / 3;
   const vertices = new Float32Array((segments + 1) * 2 * 8);
@@ -350,8 +356,8 @@ function createConveyor(canvas, images, projects) {
     attribute vec3 position;
     attribute vec2 uv;
     attribute vec3 normal;
-    uniform vec3 rig, camera, target;
-    uniform float aspect, floorHeight;
+    uniform vec3 rig, camera, target, curlAnchor, curlNormal;
+    uniform float aspect, floorHeight, entrance, curlStart;
     uniform lowp int surface;
     varying vec2 vUv;
     varying vec3 vNormal;
@@ -375,8 +381,29 @@ function createConveyor(canvas, images, projects) {
       vec3 right = normalize(cross(forward, vec3(0.0, 1.0, 0.0)));
       vec3 up = cross(right, forward);
       vec3 world = surface == ${floorPass} ? position : rotate(position, rig);
-      vHeightAboveFloor = world.y - floorHeight;
       vNormal = rotate(normal, rig);
+      if (surface != ${floorPass}) {
+        float along = uv.x / ${(ribbonLayout().length / (ribbonLayout().height * 4 / 3)).toFixed(8)};
+        // A travelling bend follows the growing head; it relaxes into the gallery path.
+        float wave = sin(min(along, curlStart) * 19.0 - entrance * 8.0) * (1.0 - entrance);
+        if (along > curlStart) {
+          // Construct the tip from one fixed tangent, rather than bending an
+          // already curved path. The narrowing spiral keeps successive turns apart.
+          float s = max(0.0, min(along, entrance) - curlStart) * ${ribbonLayout().length.toFixed(8)};
+          float turn = (0.55 - sqrt(max(0.0001, 0.3025 - 0.08 * s))) / 0.04;
+          vec3 n = normalize(curlNormal);
+          vec3 tangent = normalize(cross(vec3(0.0, 1.0, 0.0), n));
+          float x = 0.55 * sin(turn) - 0.04 * (turn * sin(turn) + cos(turn) - 1.0);
+          float z = 0.55 * (1.0 - cos(turn)) + 0.04 * (turn * cos(turn) - sin(turn));
+          vec3 point = curlAnchor + tangent * x + n * z;
+          point.y += (uv.y - 0.5) * ${ribbonLayout().height.toFixed(8)};
+          world = rotate(point, rig);
+          vNormal = rotate(n * cos(turn) - tangent * sin(turn), rig);
+        }
+        world.y += wave * 2.4;
+        world.x += wave * 1.5;
+      }
+      vHeightAboveFloor = world.y - floorHeight;
       vAcross = rotate(cross(normal, cross(vec3(0.0, 1.0, 0.0), normal)), rig);
       if (surface == ${reflectionPass}) world.y = 2.0 * floorHeight - world.y;
       vec3 delta = world - camera;
@@ -390,7 +417,7 @@ function createConveyor(canvas, images, projects) {
   const fragmentSource = `
     precision highp float;
     uniform sampler2D atlas, reflection, softReflection;
-    uniform float offset, count, picking, lightTheme;
+    uniform float offset, count, picking, lightTheme, entrance;
     uniform lowp int surface;
     uniform vec2 grid, atlasSize, sceneSize;
     uniform vec2 reflectionSize, blurStep;
@@ -445,6 +472,7 @@ function createConveyor(canvas, images, projects) {
     }
     void main() {
       if (surface == ${blurPass}) { gl_FragColor = blurReflection(); return; }
+      if (surface != ${floorPass} && vUv.x / ${(ribbonLayout().length / (ribbonLayout().height * 4 / 3)).toFixed(8)} > entrance) discard;
       if (surface == ${floorPass}) { gl_FragColor = glassFloor(); return; }
       if (surface == ${reflectionPass} && vHeightAboveFloor < 0.0) discard;
       vec3 normal = normalize(vNormal);
@@ -459,8 +487,8 @@ function createConveyor(canvas, images, projects) {
       vec2 inset = 0.5 * grid / atlasSize;
       vec2 sampleUv = (cell + mix(inset, 1.0 - inset, local)) / grid;
       vec4 artwork = texture2D(atlas, sampleUv);
-      vec3 backdrop = mix(vec3(0.03137, 0.04314, 0.12549), vec3(0.95686, 0.95294, 0.98039), lightTheme);
-      vec3 color = mix(backdrop, artwork.rgb, artwork.a);
+      // Charcoal film stock catches the scene light while the canvas stays transparent.
+      vec3 color = mix(vec3(0.11, 0.12, 0.14), artwork.rgb, artwork.a);
       normal *= side;
       vec3 view = normalize(vView);
       float diffuse = max(0.0, dot(normal, light));
@@ -573,7 +601,7 @@ function createConveyor(canvas, images, projects) {
   gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, softReflection, 0);
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   const uniformNames = ["rig", "camera", "target", "aspect", "offset", "count", "picking", "surface", "floorHeight",
-    "grid", "atlasSize", "reflection", "softReflection", "sceneSize", "reflectionSize", "blurStep", "lightTheme"];
+    "grid", "atlasSize", "reflection", "softReflection", "sceneSize", "reflectionSize", "blurStep", "lightTheme", "entrance", "curlAnchor", "curlNormal", "curlStart"];
   const locations = Object.fromEntries(uniformNames.map(name => [name, gl.getUniformLocation(program, name)]));
   gl.uniform1i(locations.reflection, 1);
   gl.uniform1i(locations.softReflection, 2);
@@ -595,6 +623,13 @@ function createConveyor(canvas, images, projects) {
   }
 
   function draw(state, picking = false) {
+    const entrance = state.entrance ?? 1;
+    const curlStart = Math.max(0, entrance - (0.55 * 6.5 - .02 * 6.5 ** 2) / ribbonLayout().length);
+    const anchor = conveyorPoint(curlStart);
+    gl.uniform1f(locations.entrance, entrance);
+    gl.uniform1f(locations.curlStart, curlStart);
+    gl.uniform3f(locations.curlAnchor, anchor.x, anchor.y, anchor.z);
+    gl.uniform3f(locations.curlNormal, anchor.nx, 0, anchor.nz);
     gl.uniform1f(locations.lightTheme, document.documentElement.dataset.theme === 'light' ? 1 : 0);
     const view = ribbonView(state, viewportWidth, viewportHeight);
     gl.uniform3f(locations.camera, ...view.camera);

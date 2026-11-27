@@ -335,6 +335,7 @@ const initPedestal = () => {
   let activeModelId = MODELS[0].id
   let loadToken = 0
   let currentObject = null
+  let needsRender = true
 
   // Центрируем и масштабируем модель вокруг её геометрического центра для свободного вращения
   const placeOnPedestal = object => {
@@ -383,6 +384,8 @@ const initPedestal = () => {
     velY = 0
     modelPivot.add(object)
     currentObject = object
+    root.dataset.modelState = 'ready'
+    needsRender = true
   }
 
   // Загрузка или подстановка модели из кэша
@@ -409,6 +412,7 @@ const initPedestal = () => {
     }
 
     loaderEl?.classList.add('is-visible')
+    root.dataset.modelState = 'loading'
     gltfLoader.load(
       model.modelUrl,
       gltf => {
@@ -420,9 +424,11 @@ const initPedestal = () => {
         mountObject(loaded)
       },
       undefined,
-      () => {
+      error => {
         if (currentToken !== loadToken) return
         loaderEl?.classList.remove('is-visible')
+        root.dataset.modelState = 'error'
+        console.warn('Pedestal model could not load:', model.modelUrl, error)
       }
     )
   }
@@ -449,6 +455,7 @@ const initPedestal = () => {
 
   // Вращение только самой модели курсором во все стороны (кватернионы без блокировки осей)
   canvas.addEventListener('pointerdown', event => {
+    needsRender = true
     isDragging = true
     lastPointer = { x: event.clientX, y: event.clientY }
     velX = 0
@@ -458,6 +465,7 @@ const initPedestal = () => {
 
   canvas.addEventListener('pointermove', event => {
     if (!isDragging) return
+    needsRender = true
     const dx = event.clientX - lastPointer.x
     const dy = event.clientY - lastPointer.y
     lastPointer = { x: event.clientX, y: event.clientY }
@@ -481,8 +489,10 @@ const initPedestal = () => {
 
   canvas.addEventListener('pointerup', endDrag)
   canvas.addEventListener('pointercancel', endDrag)
+  canvas.addEventListener('lostpointercapture', endDrag)
 
   canvas.addEventListener('wheel', event => {
+    if (document.documentElement.classList.contains('depth-enabled') && !event.ctrlKey) return
     event.preventDefault()
     targetZoom = Math.min(7.2, Math.max(2.6, targetZoom + event.deltaY * 0.0025))
   }, { passive: false })
@@ -497,10 +507,12 @@ const initPedestal = () => {
 
   autoRotateBtn?.addEventListener('click', () => {
     autoRotate = !autoRotate
+    needsRender = true
     syncAutoRotateBtn()
   })
 
   resetBtn?.addEventListener('click', () => {
+    needsRender = true
     modelPivot.quaternion.identity()
     velX = 0
     velY = 0
@@ -508,12 +520,17 @@ const initPedestal = () => {
   })
 
   // Адаптивный ресайз WebGL-сцены
+  let renderWidth = 0, renderHeight = 0
   const updateSize = () => {
-    const rect = stageEl.getBoundingClientRect()
-    if (!rect.width || !rect.height) return
-    camera.aspect = rect.width / rect.height
+    // CSS flight transforms affect the bounding rectangle, not the drawing buffer.
+    const width = stageEl.clientWidth, height = stageEl.clientHeight
+    if (!width || !height || (width === renderWidth && height === renderHeight)) return
+    renderWidth = width
+    renderHeight = height
+    camera.aspect = width / height
     camera.updateProjectionMatrix()
-    renderer.setSize(rect.width, rect.height, false)
+    renderer.setSize(width, height, false)
+    needsRender = true
   }
 
   const resizeObserver = new ResizeObserver(updateSize)
@@ -522,15 +539,33 @@ const initPedestal = () => {
 
   // Останавливаем рендер-цикл, когда секция вне экрана (экономия ресурсов)
   let isVisible = true
+  const syncFlightVisibility = () => {
+    const flightScene = root.closest('.depth-scene')
+    if (!flightScene) return false
+    const rect = stageEl.getBoundingClientRect()
+    isVisible = flightScene.style.visibility === 'visible'
+      && getComputedStyle(root).visibility !== 'hidden'
+      && rect.width > 1 && rect.height > 1
+      && rect.bottom > 0 && rect.top < innerHeight
+      && rect.right > 0 && rect.left < innerWidth
+    if (isVisible) { updateSize(); needsRender = true }
+    return true
+  }
   const visibilityObserver = new IntersectionObserver(entries => {
+    // Ancestor clipping and scale animations can leave the observer's desktop
+    // result stale. The flight controller updates the actual projected bounds.
+    if (syncFlightVisibility()) return
     isVisible = entries[0]?.isIntersecting ?? true
+    if (isVisible) { updateSize(); needsRender = true }
   })
   visibilityObserver.observe(stageEl)
+  document.addEventListener('portfolio-flight', syncFlightVisibility)
+  syncFlightVisibility()
 
   const clock = new THREE.Clock()
   const animate = () => {
     requestAnimationFrame(animate)
-    if (!isVisible) return
+    if (document.hidden || (!isVisible && !needsRender)) return
 
     const elapsed = clock.getElapsedTime()
 
@@ -558,6 +593,7 @@ const initPedestal = () => {
     camera.lookAt(0, 0.3, 0)
 
     renderer.render(scene, camera)
+    needsRender = false
   }
 
   selectModel(activeModelId)

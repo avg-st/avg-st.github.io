@@ -43,6 +43,7 @@
     if (visible && !pendingFrame) pendingFrame = requestAnimationFrame(syncScroll);
   };
   const notify = () => {
+    if (document.documentElement.classList.contains('depth-enabled')) return;
     send({ type: 'ribbon-visibility', visible });
     scheduleScroll();
   };
