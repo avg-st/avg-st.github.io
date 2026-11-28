@@ -1,0 +1,32 @@
+/* Typography shares About's body-font token; the copy stays steady after arrival. */
+.home-data { position:relative; isolation:isolate; font-family:var(--body-font); }
+.home-data::before { content:''; position:absolute; inset:-65px -45px; z-index:-1; border-radius:50%; background:radial-gradient(ellipse,#080b20ed 15%,#080b20a8 53%,transparent 74%); pointer-events:none; }
+.home .hero-depth-data { animation:none; transform:none; }
+.home .hero-depth-data > *, .home .hero-stack span { animation:none; }
+.home .home-title { font-family:var(--body-font); font-size:clamp(54px,5.8vw,84px); font-weight:700; letter-spacing:-.055em; line-height:1.08; color:#f8f7ff; text-shadow:0 3px 20px #080b2099; }
+.home .hero-description { max-width:34ch; color:#e2dff0; font-size:20px; font-weight:450; line-height:1.65; }
+.home .hero-eyebrow { color:#e0d2ff; font-weight:600; }
+.home .hero-eyebrow span { color:#c0bad4; }
+.home .hero-stack { color:#d2cce1; }
+.home .hero-secondary { color:#e4dff3; }
+.home .hero-art { height:540px; width:100%; transform:none; perspective:none; margin:0; align-self:center; }
+.hero-planet-stage { position:absolute; inset:0 0 32px; }
+.hero-planet-canvas { position:absolute; inset:0; display:block; width:100%; height:100%; mask-image:none; -webkit-mask-image:none; pointer-events:none; }
+.hero-planet-caption { position:absolute; left:0; right:0; bottom:0; margin:0; text-align:center; font-size:10px; font-weight:600; letter-spacing:2px; color:#c8c0df; }
+.hero-planet-fallback { display:none; position:absolute; width:50%; aspect-ratio:1; left:25%; top:25%; border-radius:50%; background:radial-gradient(circle at 27% 25%,#9587ce,#383154 42%,#101023 80%); box-shadow:12px -4px 30px #76e2f64d; }
+.hero-art[data-render-state="unavailable"] .hero-planet-fallback { display:block; }
+[data-theme="light"] .home-data::before { background:radial-gradient(ellipse,#f4f3faf2 15%,#f4f3faba 53%,transparent 74%); }
+[data-theme="light"] .home .home-title { color:#252841; text-shadow:none; }
+[data-theme="light"] .home .hero-description { color:#413a53; }
+[data-theme="light"] .home .hero-eyebrow span,[data-theme="light"] .home .hero-stack { color:#514963; }
+[data-theme="light"] .home .hero-secondary { color:#59397e; }
+[data-theme="light"] .hero-planet-caption { color:#655574; }
+@media(max-width:768px) {
+  .home.bd-grid { width:calc(100% - 40px); min-height:0; height:auto; padding:130px 0 115px; gap:28px; }
+  .home .home-title { font-size:clamp(44px,11vw,66px); letter-spacing:-.045em; }
+  .home .hero-description { font-size:18px; line-height:1.65; }
+  .home .hero-actions { margin-top:26px; gap:20px; }
+  .home .hero-stack { margin-top:26px; gap:8px; }
+  .home .hero-art { height:380px; width:min(100%,460px); transform:none; margin:0; }
+  .home-data::before { inset:-30px -15px; }
+}

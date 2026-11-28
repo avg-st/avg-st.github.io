@@ -89,7 +89,7 @@
       item.scene.style.visibility = shown ? 'visible' : 'hidden';
       const pan=Math.max(0,Math.min(item.pan,local));
       item.content.style.transform = `translateY(${-pan}px)`;
-      const isChain=['solutions','work'].includes(item.node.id);
+      const isChain=['solutions','work','skills'].includes(item.node.id);
       if(isChain && local<=-approach) {
         item.arrivalStart=null;item.returnStart=null;item.returnFrom=[];
       }

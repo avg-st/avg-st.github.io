@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="elements/pedestal.css?v=3">
     <link rel="stylesheet" href="elements/theme.css?v=5">
     <link rel="stylesheet" href="elements/hero-3d.css?v=weightless-2">
+    <link rel="stylesheet" href="elements/hero-planet.css?v=1">
     <script src="elements/hero-3d.js" defer></script>
     <script type="importmap">
     {
@@ -27,6 +28,7 @@
     <script src="elements/project-preview.js" defer></script>
     <script src="elements/showcase.js?v=shopping-project-2" defer></script>
     <script type="module" src="elements/pedestal.js?v=3" defer></script>
+    <script type="module" src="elements/hero-planet.js?v=1"></script>
     <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700|Raleway:500.700' rel='stylesheet'>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
@@ -95,8 +97,8 @@
                         <p class="hero-eyebrow">AVG DEV <span>MOBILE APP DEVELOPMENT</span></p>
                         <h1 class="home-title">Your App.<br>Your Brand.<br><span class="hero-gradient">Launched.</span>
                         </h1>
-                        <p class="hero-description">Get a custom mobile app for your business —<br>without hiring a
-                            full-time developer.<br class="desktop-break"> Fast. Reliable. Yours.</p>
+                        <p class="hero-description">Get a custom mobile app for your business — without hiring a
+                            full-time developer. Fast. Reliable. Yours.</p>
                         <div class="hero-actions"><a href="#work" class="button">See what we build</a><a
                                 href="https://avgust.zapier.app/" class="hero-secondary">Start your project</a></div>
                         <div class="hero-stack"><span>React Native</span><span>TypeScript</span><span>iOS &amp;
@@ -104,26 +106,12 @@
                 </div>
 
                 </div>
-                <div class="hero-art" aria-label="Abstract orbital sculpture with interface and code panels" role="img">
-                    <div class="hero-depth-art">                    <div class="art-halo"></div>
-                    <div class="orbital-system">
-                        <div class="orb-core"></div>
-                        <div class="orbit orbit-one"></div>
-                        <div class="orbit orbit-two"></div>
-                        <div class="orbit orbit-three"></div><span class="orbit-satellite"></span>
+                <div class="hero-art" aria-label="A three-dimensional planet with rotating orbital rings and satellites" role="img">
+                    <div class="hero-planet-stage">
+                        <canvas class="hero-planet-canvas" aria-hidden="true"></canvas>
+                        <div class="hero-planet-fallback" aria-hidden="true"></div>
                     </div>
-                    <div class="art-caption">YOUR IDEA. OUR CODE. REAL RESULTS.</div>
-                    <div class="glass-code">
-                            <div class="code-heading"><span class="window-dots">● ● ●</span><span>your-app.tsx</span>
-                            </div>
-                            <code><span class="code-purple">const</span> yourApp = {<br>&nbsp; platform: <span class="code-cyan">"iOS &amp; Android"</span>,<br>&nbsp; delivery: <span class="code-cyan">"4–8 weeks"</span>,<br>&nbsp; overhead: <span class="code-purple">0</span><br>};<br><br><span class="code-comment">// No staff. No hassle. Just results.</span></code>
-                        </div>
-                        <div class="glass-feature"><span class="feature-icon">✧</span>
-                                <div><strong>From brief to launch</strong><span>One developer. Full product. Zero
-                                        overhead.</span>
-                                </div>
-                            </div>
-                        </div>
+                    <p class="hero-planet-caption">YOUR IDEA. OUR CODE. REAL RESULTS.</p>
                 </div>
 
                         <div class="home-social">
