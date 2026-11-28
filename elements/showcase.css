@@ -1,0 +1,49 @@
+/* Scoped adaptations of the Shakuro and MDJAmin CodePen examples. */
+/* Fade only the background network, leaving text and the ribbon untouched. */
+#demo-canvas.has-ribbon-fade {
+  --ribbon-network-mask: linear-gradient(
+    to bottom,
+    #000 var(--ribbon-fade-start),
+    transparent var(--ribbon-gap-start),
+    transparent var(--ribbon-gap-end),
+    #000 var(--ribbon-fade-end)
+  );
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, rgb(0 0 0 / .7) 80%, transparent 95%), var(--ribbon-network-mask);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, #000 70%, rgb(0 0 0 / .7) 80%, transparent 95%), var(--ribbon-network-mask);
+  mask-composite: intersect;
+}
+
+.ribbon-showcase {
+  position: relative;
+  margin-block: 0;
+  background: #fff;
+  color: var(--second-color);
+  scroll-margin-top: 4rem;
+}
+
+.ribbon-showcase-frame {
+  display: block;
+  width: 100%;
+  height: clamp(440px, 55vw, 760px);
+  border: 0;
+  /* Native page scrolling stays on the parent document on every input device. */
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 82%, transparent);
+}
+
+.ribbon-showcase:focus-visible { outline: 2px solid var(--first-color); outline-offset: -4px; }
+
+.showcase-credit {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  font-size: .875rem;
+  line-height: 1.6;
+}
+
+.showcase-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}

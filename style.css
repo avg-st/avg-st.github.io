@@ -979,7 +979,7 @@ img {
 div.tp-dfwv {
   position: fixed;
 }
-/* Стили для "Avgust AI" с металлическим радужным градиентом */
+/* Стили для "AVG Dev" с металлическим радужным градиентом */
 .brand-gradient {
   
   /* Радужный градиент по диагонали */
@@ -1004,7 +1004,7 @@ div.tp-dfwv {
 
 /* Псевдоэлемент для металлического эффекта и усиленного осветления сверху */
 .brand-gradient::before {
-  content: "Avgust AI"; /* Повторяем текст */
+  content: attr(data-brand);
   position: absolute;
   top: 0;
   left: 0;
@@ -1023,7 +1023,7 @@ div.tp-dfwv {
 
 /* Псевдоэлемент для усиленного затемнения снизу до середины текста */
 .brand-gradient::after {
-  content: "Avgust AI"; /* Повторяем текст */
+  content: attr(data-brand);
   position: absolute;
   top: 0;
   left: 0;
@@ -1035,6 +1035,9 @@ div.tp-dfwv {
     rgba(0, 0, 0, 1) 100% /* Максимальное затемнение снизу */
   );
   color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  pointer-events: none;
   mix-blend-mode: multiply; /* Затемнение только текста */
   opacity: 0.9; /* Интенсивность */
 }
@@ -1165,25 +1168,28 @@ div.tp-dfwv {
     -webkit-overflow-scrolling: touch;
 
     mask-image: linear-gradient(to right, 
-      transparent 0%, 
+      rgb(0 0 0 / var(--cards-left-edge, 1)) 0%,
       black 10%, 
       black 90%, 
-      transparent 100%);
+      rgb(0 0 0 / var(--cards-right-edge, 1)) 100%);
     mask-mode: match-source;
     mask-repeat: no-repeat;
     mask-size: 100% 100%;
 
     -webkit-mask-image: linear-gradient(to right, 
-      transparent 0%, 
+      rgb(0 0 0 / var(--cards-left-edge, 1)) 0%,
       black 10%, 
       black 90%, 
-      transparent 100%);
+      rgb(0 0 0 / var(--cards-right-edge, 1)) 100%);
     -webkit-mask-mode: match-source;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: 100% 100%;
 }
 
 /* Скрываем скроллбар по умолчанию */
+.con-cards.has-scroll-before { --cards-left-edge: 0; }
+.con-cards.has-scroll-after { --cards-right-edge: 0; }
+
 .con-cards::-webkit-scrollbar {
     width: 0; /* Убираем ширину скроллбара для WebKit-браузеров */
     height: 0;
