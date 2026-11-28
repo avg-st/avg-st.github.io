@@ -39,7 +39,7 @@
     content.className = 'depth-content';
     content.append(node); scene.append(content); viewport.append(scene);
     const units = collectUnits(node);
-    return { node, spacer, scene, content, units, start:0, read:0, index, arrivalStart:null, returnStart:null, returnFrom:[] };
+    return { node, spacer, scene, content, units, start:0, read:0, index, arrivalStart:null, returnStart:null, returnFrom:[], ribbonStart:null };
   });
   document.body.append(viewport);
   let frame = 0, layoutFrame = 0, lastScroll = window.scrollY;
@@ -71,15 +71,21 @@
       // Leave room to experience the journey before revealing the destination.
       exit = clamp(exit / .36);
       const isRibbon = item.node.id === 'ribbon-gallery';
-      const arrival = previous ? clamp(((local + approach) / approach - .32) / .68) : 1;
       const active = local >= 0 && local < item.read + item.travel;
       if (active) current = i;
       const shown = local > -approach && exit < 1;
       // The scene stays in place on arrival; its objects approach independently.
       const z = local < 0 ? 0 : 990 * exit;
       item.scene.style.transform = `translateZ(${z}px)`;
-      item.scene.style.opacity = String(local < 0 ? (isRibbon ? clamp(arrival * 5) : 1) : 1 - Math.pow(exit, 2));
-      if (isRibbon) item.node.querySelector('iframe')?.contentWindow?.postMessage({type:'ribbon-entrance',progress:local<0?arrival:1},location.origin);
+      item.scene.style.opacity = String(local < 0 ? (isRibbon ? 0 : 1) : 1 - Math.pow(exit, 2));
+      if(isRibbon) {
+        if(local<0 || local>=item.read+item.travel)item.ribbonStart=null;
+        const settled=local>=0 && local<=item.read && !document.documentElement.classList.contains('auto-flight');
+        if(settled && item.ribbonStart===null)item.ribbonStart=now;
+        const rollout=item.ribbonStart===null?0:clamp((now-item.ribbonStart)/2100);
+        item.node.querySelector('iframe')?.contentWindow?.postMessage({type:'ribbon-entrance',progress:rollout},location.origin);
+        if(shown && item.ribbonStart!==null && rollout<1)animatingArrival=true;
+      }
       item.scene.style.visibility = shown ? 'visible' : 'hidden';
       const pan=Math.max(0,Math.min(item.pan,local));
       item.content.style.transform = `translateY(${-pan}px)`;
@@ -166,9 +172,92 @@
   window.addEventListener('scroll', schedule, { passive:true });
   window.addEventListener('resize', scheduleLayout, { passive:true });
   document.addEventListener('portfolio-flight-ready', schedule);
+  let autoFlight=null,flightCooldown=0;
+  const stopFlight=()=>{
+    if(autoFlight)cancelAnimationFrame(autoFlight.frame);
+    autoFlight=null;
+    document.documentElement.classList.remove('auto-flight');
+    schedule();
+  };
+  const flyTo=({top,hash})=>{
+    stopFlight();
+    const from=window.scrollY;
+    const destination=Math.min(document.documentElement.scrollHeight-innerHeight,Math.ceil(top));
+    const flight={frame:0,start:null};autoFlight=flight;
+    document.documentElement.classList.add('auto-flight');
+    const step=now=>{
+      if(autoFlight!==flight)return;
+      if(flight.start===null)flight.start=now;
+      const p=clamp((now-flight.start)/2200);
+      const eased=p*p*p*(p*(p*6-15)+10);
+      window.scrollTo({top:from+(destination-from)*eased,behavior:'instant'});
+      if(p<1)flight.frame=requestAnimationFrame(step);
+      else {
+        stopFlight();flightCooldown=now+220;
+        if(hash)history.replaceState(null,'',hash);
+      }
+    };
+    flight.frame=requestAnimationFrame(step);
+  };
+  const flightTarget=delta=>{
+    const y=window.scrollY;
+    const footerTop=footer?footer.getBoundingClientRect().top+y:Infinity;
+    const last=scenes[scenes.length-1];
+    if(y>=footerTop-1) {
+      return delta<0 && y+delta<=footerTop+1 ? {top:last.start+last.read,hash:'#'+last.node.id}:null;
+    }
+    let index=0;
+    scenes.forEach((item,i)=>{if(y>=item.start-1)index=i;});
+    const item=scenes[index],end=item.start+item.read;
+    if(delta>0 && y+delta>=end-1) {
+      const next=scenes[index+1];
+      return {top:next?next.start:footerTop,hash:next?'#'+next.node.id:null};
+    }
+    if(delta<0) {
+      if(y>end+1)return {top:end,hash:'#'+item.node.id};
+      const previous=scenes[index-1];
+      if(previous && y+delta<=item.start+1)return {top:previous.start+previous.read,hash:'#'+previous.node.id};
+    }
+    return null;
+  };
+  const scrollsInside=(target,delta)=>{
+    if(!(target instanceof Element))return false;
+    if(target.closest('dialog[open]'))return true;
+    for(let element=target;element&&element!==document.body&&element!==document.documentElement;element=element.parentElement) {
+      if(!/(auto|scroll)/.test(getComputedStyle(element).overflowY)||element.scrollHeight<=element.clientHeight+1)continue;
+      if(delta>0?element.scrollTop+element.clientHeight<element.scrollHeight-1:element.scrollTop>1)return true;
+    }
+    return false;
+  };
+  window.addEventListener('wheel',event=>{
+    if(event.defaultPrevented||event.ctrlKey||event.metaKey||Math.abs(event.deltaX)>Math.abs(event.deltaY)||!event.deltaY)return;
+    if(autoFlight||performance.now()<flightCooldown){event.preventDefault();return;}
+    const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?innerHeight:1);
+    if(scrollsInside(event.target,delta))return;
+    const target=flightTarget(delta);
+    if(target&&Number.isFinite(target.top)){event.preventDefault();flyTo(target);}
+  },{passive:false});
+  window.addEventListener('keydown',event=>{
+    if(event.key==='Escape'){stopFlight();return;}
+    if(event.defaultPrevented||event.ctrlKey||event.metaKey||event.altKey)return;
+    if(event.target instanceof Element && event.target.closest('input,textarea,select,[contenteditable="true"],dialog[open]'))return;
+    let delta=0;
+    if(event.key==='ArrowDown')delta=60;
+    if(event.key==='ArrowUp')delta=-60;
+    if(event.key==='PageDown')delta=innerHeight*.85;
+    if(event.key==='PageUp')delta=-innerHeight*.85;
+    if(!delta)return;
+    if(autoFlight){event.preventDefault();return;}
+    if(scrollsInside(event.target,delta))return;
+    const target=flightTarget(delta);
+    if(target&&Number.isFinite(target.top)){event.preventDefault();flyTo(target);}
+  });
+  window.addEventListener('resize',stopFlight,{passive:true});
+  window.addEventListener('touchstart',stopFlight,{passive:true});
   const go = (hash, smooth = true) => {
     const item = scenes.find(item => '#' + item.node.id === hash);
     if (!item) return false;
+    stopFlight();
     window.scrollTo({ top:Math.ceil(item.start), behavior:smooth ? 'smooth' : 'instant' });
     return true;
   };

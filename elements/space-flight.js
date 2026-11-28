@@ -53,6 +53,17 @@ function init(renderer, host) {
   };
   const cameraTarget=new THREE.Vector3();
   const smooth = x => x*x*x*(x*(x*6-15)+10);
+  const starCanvas=document.createElement('canvas');
+  starCanvas.width=starCanvas.height=64;
+  const starContext=starCanvas.getContext('2d');
+  const starGlow=starContext.createRadialGradient(32,32,0,32,32,30);
+  starGlow.addColorStop(0,'rgba(255,255,255,1)');
+  starGlow.addColorStop(.2,'rgba(255,255,255,1)');
+  starGlow.addColorStop(.45,'rgba(255,255,255,.5)');
+  starGlow.addColorStop(.75,'rgba(255,255,255,.08)');
+  starGlow.addColorStop(1,'rgba(255,255,255,0)');
+  starContext.fillStyle=starGlow;starContext.fillRect(0,0,64,64);
+  const starTexture=new THREE.CanvasTexture(starCanvas);
   let seed = 9217;
   const random = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const count = 1200 * legs;
@@ -68,7 +79,7 @@ function init(renderer, host) {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position',new THREE.BufferAttribute(points,3));
   geometry.setAttribute('color',new THREE.BufferAttribute(colors,3));
-  const stars = new THREE.Points(geometry, new THREE.PointsMaterial({size:5,vertexColors:true,transparent:true,opacity:.85,sizeAttenuation:true,depthWrite:false}));
+  const stars = new THREE.Points(geometry, new THREE.PointsMaterial({map:starTexture,size:5,vertexColors:true,transparent:true,opacity:.85,sizeAttenuation:true,depthWrite:false}));
   world.add(stars);
   // A separate, sparse star field marks the quiet destination beyond the final leg.
   const quietPoints = new Float32Array(14 * 3);
@@ -80,8 +91,47 @@ function init(renderer, host) {
   }
   const quietGeometry = new THREE.BufferGeometry();
   quietGeometry.setAttribute('position',new THREE.BufferAttribute(quietPoints,3));
-  const quietStars = new THREE.Points(quietGeometry,new THREE.PointsMaterial({color:0xc4ccdb,size:1.5,sizeAttenuation:false,transparent:true,opacity:0,depthWrite:false}));
+  const quietStars = new THREE.Points(quietGeometry,new THREE.PointsMaterial({map:starTexture,color:0xc4ccdb,size:1.5,sizeAttenuation:false,transparent:true,opacity:0,depthWrite:false}));
   world.add(quietStars);
+  // Replace the prominent nearby star to the right of the Solutions → FAQ flight.
+  const cometLeg=[...document.querySelectorAll('.depth-scene > .depth-content > section')].findIndex(section=>section.id==='solutions');
+  const probe=camera.clone(),probeTarget=new THREE.Vector3(),probeDirection=new THREE.Vector3();
+  const probeDistance=(Math.max(0,cometLeg)+.5)/legs;
+  flightPoint(probeDistance,probe.position);
+  flightPoint(Math.min(1,probeDistance+.018),probeTarget);probeTarget.z-=120;
+  probe.lookAt(probeTarget);probe.updateMatrixWorld(true);probe.getWorldDirection(probeDirection);
+  let chosen=-1,bestScore=Infinity,cometDepth=1800;
+  const projected=new THREE.Vector3(),candidate=new THREE.Vector3();
+  for(let i=0;i<count;i++) {
+    candidate.fromArray(points,i*3);
+    const depth=candidate.clone().sub(probe.position).dot(probeDirection);
+    projected.copy(candidate).project(probe);
+    if(depth<100||depth>7000||projected.x<.12||projected.x>.9||Math.abs(projected.y)>.4)continue;
+    const score=depth*(1+4*Math.hypot(projected.x-.4,projected.y));
+    if(score<bestScore){bestScore=score;chosen=i;cometDepth=depth;}
+  }
+  const cometOrigin=chosen>=0?new THREE.Vector3().fromArray(points,chosen*3):probe.position.clone().addScaledVector(probeDirection,1800);
+  if(chosen>=0){points[chosen*3+2]=1e6;geometry.attributes.position.needsUpdate=true;}
+  const tailCanvas=document.createElement('canvas');tailCanvas.width=256;tailCanvas.height=64;
+  const tailContext=tailCanvas.getContext('2d'),tailPixels=tailContext.createImageData(256,64);
+  for(let y=0;y<64;y++)for(let x=0;x<256;x++) {
+    const u=x/255,v=y/63,width=.035+.16*(1-u),index=(y*256+x)*4;
+    const alpha=Math.pow(u,1.5)*Math.exp(-((v-.5)**2)/(2*width*width))*Math.sin(Math.PI*v)**2;
+    tailPixels.data[index]=150+105*u;tailPixels.data[index+1]=200+55*u;
+    tailPixels.data[index+2]=255;tailPixels.data[index+3]=Math.round(alpha*190);
+  }
+  tailContext.putImageData(tailPixels,0,0);
+  const comet=new THREE.Group();
+  const cometMaterial=map=>new THREE.SpriteMaterial({map,color:0xc7eaff,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+  const cometHead=new THREE.Sprite(cometMaterial(starTexture));
+  const cometHalo=new THREE.Sprite(cometMaterial(starTexture));
+  const cometTail=new THREE.Sprite(cometMaterial(new THREE.CanvasTexture(tailCanvas)));
+  cometHead.scale.setScalar(cometDepth*.009);cometHalo.scale.setScalar(cometDepth*.055);
+  cometTail.scale.set(cometDepth*.2,cometDepth*.024,1);cometTail.center.set(1,.5);
+  comet.add(cometTail,cometHalo,cometHead);comet.visible=false;world.add(comet);
+  const cometDirection=new THREE.Vector3(-.65,-.22,.25).normalize();
+  const cometScreen=new THREE.Vector3(),cometScreenAhead=new THREE.Vector3();
+  let cometTime=0,lastDrawTime=null;
   const skyColor = new THREE.Color();
   const black = new THREE.Color(0x000000);
 
@@ -124,8 +174,11 @@ function init(renderer, host) {
   let target=0, position=0, frame=0, visible=false, flight=0;
   const resize=()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();request();};
   function request(){if(!frame)frame=requestAnimationFrame(draw);}
-  function draw(){
+  function draw(now=performance.now()){
     frame=0;
+    if(document.hidden){lastDrawTime=null;return;}
+    const deltaTime=lastDrawTime===null?0:Math.min(.1,(now-lastDrawTime)/1000);
+    lastDrawTime=now;
     const delta=target-position;
     position += delta*.16;
     if(Math.abs(delta)<.0001)position=target;
@@ -161,6 +214,19 @@ function init(renderer, host) {
     stars.material.color.set(light?0x455078:0xffffff);
     trailMaterial.color.set(light?0x596d9b:0xa9d6ff);
     camera.getWorldDirection(cameraForward);
+    const cometProgress=position-cometLeg;
+    const cometVisible=cometLeg>=0&&cometProgress>0&&cometProgress<1;
+    if(cometVisible)cometTime+=deltaTime;else cometTime=0;
+    comet.position.copy(cometOrigin).addScaledVector(cometDirection,cometTime*24);
+    const cometFade=Math.max(0,Math.min(1,cometProgress/.12,(1-cometProgress)/.18));
+    const depth=comet.position.clone().sub(camera.position).dot(cameraForward);
+    comet.visible=cometVisible&&depth>100;
+    cometHead.material.opacity=cometFade;
+    cometHalo.material.opacity=cometFade*.2;
+    cometTail.material.opacity=cometFade*.8;
+    cometScreen.copy(comet.position).project(camera);
+    cometScreenAhead.copy(comet.position).add(cometDirection).project(camera);
+    cometTail.material.rotation=Math.atan2((cometScreenAhead.y-cometScreen.y)*innerHeight,(cometScreenAhead.x-cometScreen.x)*innerWidth);
     clouds.forEach(cloud=>{
       const depth=(cloud.position.x-camera.position.x)*cameraForward.x
         +(cloud.position.y-camera.position.y)*cameraForward.y
@@ -172,7 +238,7 @@ function init(renderer, host) {
       cloud.visible=cloud.material.opacity>.0001;
     });
     if(visible)renderer.render(world,camera);
-    if(Math.abs(target-position)>.0001 && !document.hidden)request();
+    if(Math.abs(target-position)>.0001 || cometVisible)request();
   }
   document.addEventListener('portfolio-flight',event=>{
     flight=Math.max(0,Math.min(1,event.detail.progress));
@@ -184,7 +250,7 @@ function init(renderer, host) {
     if(!visible)position=target;
     request();
   });
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&visible)request();});
+  document.addEventListener('visibilitychange',()=>{lastDrawTime=null;if(!document.hidden&&visible)request();});
   new MutationObserver(request).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   window.addEventListener('resize',resize,{passive:true});
   resize();
